@@ -1,6 +1,9 @@
 import subprocess
 import requests
 from create_card import test_create_anki_card
+from import_decks import upload_csv_file, upload_anki_package
+from pathlib import Path
+
 
 # Initialize Anki with user profile "User 1"
 subprocess.run(["curl", "-X", "POST", "http://localhost:5001/api/users/create/User%201"])
@@ -33,3 +36,20 @@ if response.status_code == 200:
             print(f"Failed to retrieve contents for card ID {card_id}: {card_contents_response.status_code}")
 else:
     print("Failed to retrieve cards:", response.status_code)
+
+if __name__ == "__main__":
+    username = "User 1"
+
+    file_name = '0_Video_Segments.apkg'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/apkgs/{file_name}'
+    upload_anki_package(username, file_path)
+
+    file_name = 'Food-recite.txt'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/csv_files/{file_name}'
+    upload_csv_file(username, file_path)
+
+    file_name = 'Directions-recite.txt'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/csv_files/{file_name}'
+    upload_csv_file(username, file_path)
+
+
