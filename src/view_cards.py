@@ -45,8 +45,11 @@ def view_by_state(deck_id, state):
 def view_by_tag_and_state(tag, state):
     response = requests.get(f"http://localhost:5001/api/cards/by-tag-and-state?tag={tag}&state={state}")
     if response.status_code == 200:
-        cards = response.json()
-        print(cards)
+        cards_by_tag = response.json()[0]
+        cards_by_state = response.json()[1]
+        print(cards_by_tag)
+        print(cards_by_state)
+        print(f'len(cards_by_tag): {len(cards_by_tag)}, len(cards_by_state): {len(cards_by_state)}')
     else:
         print("Failed to retrieve cards by tag and state:", response.json()['error'], response.status_code)
 
