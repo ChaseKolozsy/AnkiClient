@@ -4,12 +4,17 @@ from create_card import test_create_anki_card
 from import_decks import upload_csv_file, upload_anki_package
 from pathlib import Path
 
+def create_deck_and_get_id(deck_name):
+    response = requests.post(f"http://localhost:5001/api/decks/create/{deck_name}")
+    if response.status_code == 201:
+        deck_data = response.json()
+        return deck_data.get("id")
+    return None
 
+# Example usage
 # Initialize Anki with user profile "User 1"
 subprocess.run(["curl", "-X", "POST", "http://localhost:5001/api/users/create/User%201"])
 
-# Create a deck named "Hungarian"
-subprocess.run(["curl", "-X", "POST", "http://localhost:5001/api/decks/create/Hungarian"])
 
 # Run the script to create a card using requests
 test_create_anki_card()
@@ -44,12 +49,18 @@ if __name__ == "__main__":
     file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/apkgs/{file_name}'
     upload_anki_package(username, file_path)
 
+    deck_id = create_deck_and_get_id("Hungarian")
+    notetype = 'Basic' 
+    deck_name = 'Hungarian'
+    delimiter = 'TAB'
+    print(deck_id)
+
     file_name = 'Food-recite.txt'
     file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/csv_files/{file_name}'
-    upload_csv_file(username, file_path)
+    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
     file_name = 'Directions-recite.txt'
     file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/csv_files/{file_name}'
-    upload_csv_file(username, file_path)
+    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
 

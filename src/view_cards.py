@@ -16,7 +16,6 @@ def view_deck_cards(deck_id):
                 print(f"Card ID: {card_contents['id']}")
                 print(f"Note ID: {card_contents['note_id']}")
                 print(f"Deck ID: {card_contents['deck_id']}")
-                print(f"Queue: {card_contents['queue']}")
                 print("Fields:")
                 for field_name, field_content in card_contents['fields'].items():
                     print(f"{field_name}: {field_content}")

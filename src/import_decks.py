@@ -24,14 +24,16 @@ def upload_anki_package(username, file_path):
                 pass
             print(f"Failed to upload package. Status code: {response.status_code}")
 
-def upload_csv_file(username, file_path):
+def upload_csv_file(username, file_path, target_deck, notetype, delimiter):
     url = 'http://localhost:5001/api/import-csv'
-    url_with_username = f"{url}?username={username}"
+    url_with_arguments = f"{url}?username={username}&target_deck={target_deck}&notetype={notetype}&delimiter={delimiter}"
+    print(url_with_arguments)
+    print(f'{file_path}, {target_deck}, {notetype}, {delimiter}')
 
     with open(file_path, 'rb') as file:
         files = {'file': file}
 
-        response = requests.post(url_with_username, files=files)
+        response = requests.post(url_with_arguments, files=files)
 
         if response.status_code == 200:
             try:
@@ -40,7 +42,7 @@ def upload_csv_file(username, file_path):
                 print("Response is not in JSON format.")
         else:
             try:
-                print(response.json())
+                print(f'Error: {response.json()}')
             except ValueError:
                 print("Bad response")
                 pass
@@ -57,7 +59,10 @@ if __name__ == "__main__":
 
     if choice == "2":
         file_name = input("Enter the name of the CSV file: ")
+        deck_name = input("Enter the deck name: ")
+        notetype = input("Enter the notetype: ")
         file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/csv_files/{file_name}'
-        upload_csv_file(username, file_path)
+        delimiter = input("Enter the delimiter: ")
+        upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
 
