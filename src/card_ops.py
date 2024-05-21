@@ -294,6 +294,7 @@ def get_cards_by_tag_and_state(tag, state):
         return None
 
 def delete_card(card_id):
+    """TESTED"""
     url = f'http://localhost:5001/api/cards/delete/{card_id}'
     try:
         response = requests.delete(url)
@@ -303,6 +304,7 @@ def delete_card(card_id):
         return None
 
 def delete_cards_by_tag(tag):
+    """TESTED"""
     url = 'http://localhost:5001/api/cards/delete/by-tag'
     params = {"tag": tag}
     try:
@@ -313,6 +315,7 @@ def delete_cards_by_tag(tag):
         return None
 
 def delete_cards_by_deck(deck_identifier):
+    """TESTED"""
     url = 'http://localhost:5001/api/cards/delete/by-deck'
     params = {"deck": deck_identifier}
     try:
@@ -333,6 +336,8 @@ if __name__ == "__main__":
     else:
         print("Failed to retrieve notetypes.")
 
+
+
     response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Norway?", "Back": "Oslo"}, ["geography", "capitals"])
     print(response, status, '\n\n')
     if status == 201:
@@ -343,7 +348,25 @@ if __name__ == "__main__":
     card = get_card_by_id(response['card_ids'][0])
     print(card, '\n\n')
 
-    response, status = change_card_notetype(response['note_id'], notetype_dict["Basic (type in the answer)"], False)
+    print("\n\n-------------- Contents ------------------------\n\n")
+
+    response, status = get_card_contents(card_id)
+    print(response, '\n\n')
+
+    print("\n\n-------------- By Tag and State ------------------------\n\n")
+
+    response, status = get_cards_by_tag_and_state("Food", "due")
+    print(response, '\n\n')
+
+    print("\n\n-------------- By Tag and State ------------------------\n\n")
+
+
+    response, status = get_cards_by_tag_and_state("Food", "new")
+    print(response, '\n\n')
+
+    print("\n\n-------------------------------------------\n\n")
+
+    response, status = change_card_notetype(card_id, notetype_dict["Basic (type in the answer)"], False)
     print(response, status, '\n\n')
 
     notetype_id = get_notetype_id_by_card_id(card_id)
@@ -394,64 +417,91 @@ if __name__ == "__main__":
     else:
         print("No cards to delete")
 
-#    response = reschedule_card(response['card_id'], "2024-01-01")
-#    print(response, '\n\n')
-#
-#    response = reschedule_cards_by_tag("geography", "2024-01-01")
-#    print(response, '\n\n')
-#
-#    response = reschedule_cards_by_deck(1, "2024-01-01")
-#    print(response, '\n\n')
-#
-#    response = reposition_card(response['card_id'], 1)
-#    print(response, '\n\n')
-#
-#    response = reposition_cards_by_tag("geography", 1)
-#    print(response, '\n\n')
-#
-#    response = reposition_cards_by_deck(1, 1)
-#    print(response, '\n\n')
-#
-#    response = reset_card(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = reset_cards_by_tag("geography")
-#    print(response, '\n\n')
-#
-#    response = reset_cards_by_deck(1)
-#    print(response, '\n\n')
-#
-#    response = suspend_card(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = suspend_cards_by_tag("geography")
-#    print(response, '\n\n')
-#
-#    response = suspend_cards_by_deck(1)
-#    print(response, '\n\n')
-#
-#    response = bury_card(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = bury_cards_by_tag("geography")
-#    print(response, '\n\n')
-#
-#    response = bury_cards_by_deck(1)
-#    print(response, '\n\n')
-#
-#    response = get_card_contents(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = get_card_by_id(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = get_cards_by_tag("geography")
-#    print(response, '\n\n')
-#
-#    response = get_cards_by_state(1, "due")
-#    print(response, '\n\n')
-#
-#    response = get_cards_by_tag_and_state("geography", "due")
-#    print(response, '\n\n')
-#
-#
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Norway?", "Back": "Oslo"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Denmark?", "Back": "Copenhagen"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Germany?", "Back": "Berlin"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of France?", "Back": "Paris"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Spain?", "Back": "Madrid"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Italy?", "Back": "Rome"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of UK?", "Back": "London"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Sweden?", "Back": "Stockholm"}, ["geography", "capitals"])
+
+    if status == 201:
+        card_id = response['card_ids'][0]
+    else:
+        print("Failed to create cards")
+
+    response, status = reschedule_card(card_id, "7")
+    print(response, '\n\n')
+
+    response, status = reschedule_cards_by_tag("geography", None, 7, 21, False)
+    print(response, '\n\n')
+
+    response, status = reschedule_cards_by_deck(1, None, 9, 27, False)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    for card in response:
+        print(card)
+
+    response, status = get_cards_by_state(1, "due")
+    print(response, '\n\n')
+
+    print("\n\n-------------------------------------------\n\n")
+
+
+    response = reset_card(card_id)
+    print(response, '\n\n')
+
+    response = reset_cards_by_tag("geography")
+    print(response, '\n\n')
+
+    response = reset_cards_by_deck(1)
+    print(response, '\n\n')
+
+    response, status = reposition_card(card_id, 99)
+    print(response, '\n\n')
+
+    response, status = reposition_cards_by_tag("geography", 1)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    for card in response:
+        print(card)
+
+    response, status = reposition_cards_by_deck(1, 1000)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    for card in response:
+        print(card)
+
+    response, status = suspend_card(card_id)
+    print(response, '\n\n')
+
+    response, status = suspend_cards_by_tag("geography")
+    print(response, '\n\n')
+
+    response, status = suspend_cards_by_deck(1)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    for card in response:
+        print(card)
+
+    response, status = bury_card(card_id)
+    print(response, '\n\n')
+
+    response, status = bury_cards_by_tag("geography")
+    print(response, '\n\n')
+
+    response, status = bury_cards_by_deck(1)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    for card in response:
+        print(card)
+
+
+    response, status = delete_cards_by_deck(1)
+    print(response, '\n\n')
