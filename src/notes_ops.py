@@ -133,6 +133,16 @@ def delete_notetype_by_id(notetype_id):
         print(f"An error occurred: {e}")
         return None
 
+def get_notetype_id_by_card_id(card_id):
+    url = f"http://localhost:5001/api/cards/{card_id}/notetype"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad status codes
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+
 
 # Example usage
 if __name__ == "__main__":
