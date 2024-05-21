@@ -366,7 +366,34 @@ if __name__ == "__main__":
 
     response, status = move_cards(card_ids, "Hungarian", "User 1")
     print(response, status, '\n\n')
-#
+
+
+    response, status = delete_card(card_id)
+    print(response, '\n\n')
+
+    response, status = delete_cards_by_tag("geography")
+    print(response, '\n\n')
+
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Norway?", "Back": "Oslo"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Denmark?", "Back": "Copenhagen"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Germany?", "Back": "Berlin"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of France?", "Back": "Paris"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Spain?", "Back": "Madrid"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Italy?", "Back": "Rome"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of UK?", "Back": "London"}, ["geography", "capitals"])
+    response, status = create_anki_card("Basic", 1, {"Front": "What is the capital of Sweden?", "Back": "Stockholm"}, ["geography", "capitals"])
+
+    response, status = delete_cards_by_deck(1)
+    print(response, '\n\n')
+
+    response, status = get_cards_by_tag("geography")
+    print(f"status: {status}")
+    if len(response) > 0:
+        for card in response:
+            print(card['id'])
+    else:
+        print("No cards to delete")
+
 #    response = reschedule_card(response['card_id'], "2024-01-01")
 #    print(response, '\n\n')
 #
@@ -427,12 +454,4 @@ if __name__ == "__main__":
 #    response = get_cards_by_tag_and_state("geography", "due")
 #    print(response, '\n\n')
 #
-#    response = delete_card(response['card_id'])
-#    print(response, '\n\n')
-#
-#    response = delete_cards_by_tag("geography")
-#    print(response, '\n\n')
-#
-#    response = delete_cards_by_deck(1)
-#    print(response, '\n\n')
 #
