@@ -11,7 +11,7 @@ def create_deck_and_get_id(deck_name):
         return deck_data.get("id")
     return None
 
-# Example usage
+# Example usageg
 # Initialize Anki with user profile "User 1"
 subprocess.run(["curl", "-X", "POST", "http://localhost:5001/api/users/create/User%201"])
 
