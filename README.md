@@ -2,6 +2,9 @@
 
 AnkiClient is a Python-based client that interacts with Anki to manage decks, cards, media, and user operations. This client provides various functionalities to import, create, view, and manage Anki content programmatically.
 
+## AnkiAPI
+[Visit AnkiAPI for the API that this client uses](https://github.com/ChaseKolozsy/AnkiAPI)
+
 ## Features
 
 - Import decks and media
