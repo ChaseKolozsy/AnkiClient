@@ -12,6 +12,7 @@ AnkiClient is a Python-based client that interacts with Anki to manage decks, ca
 
 ## Directory Structure
 
+```
 src/
 ├── Misc. Test Scripts:
 |   ├── import_media.py
@@ -28,6 +29,7 @@ src/
 │   ├── import_ops.py
 │   ├── export_ops.py
 │   ├── card_ops.py
+```
 
 ## Installation
 
