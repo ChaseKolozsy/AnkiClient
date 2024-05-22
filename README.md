@@ -1,5 +1,3 @@
-Sure, here is the `README.md` content in a codeblock for easy copying:
-
 ```markdown
 # AnkiClient
 
