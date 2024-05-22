@@ -1,5 +1,7 @@
 import requests
 
+deck_id = 1716401326723
+
 def study(deck_id, action, base_url='http://localhost:5001'):
     url = f"{base_url}/api/study"
     response = requests.post(url, json={"action": action, "deck_id": deck_id})
@@ -9,19 +11,19 @@ def study(deck_id, action, base_url='http://localhost:5001'):
 if __name__ == "__main__":
     # Start a review session
     try:
-        print(study(1716329734843, 'start'))
+        print(study(deck_id, 'start'))
     except Exception as e:
         print(e)
 
     # Flip the current card
     try:
-        print(study(1716329734843, 'flip'))
+        print(study(deck_id, 'flip'))
     except Exception as e:
         print(e)
 
     ## Answer the current card with ease level 3
     try:
-        print(study(1716329734843, '3'))
+        print(study(deck_id, '3'))
     except Exception as e:
         print(e)
 
