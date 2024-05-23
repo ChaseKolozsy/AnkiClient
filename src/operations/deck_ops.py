@@ -98,6 +98,10 @@ def get_deck_config(deck_id):
     response = requests.get(f"{BASE_URL}/{deck_id}/config")
     return response.json()
 
+def get_deck_config_enums():
+    response = requests.get(f"{BASE_URL}/config/enums")
+    return response.json()
+
 if __name__ == "__main__":
     notetypes = get_notetypes()
     notetype_dict = {}
@@ -120,73 +124,103 @@ if __name__ == "__main__":
     print(change_deck_notetype_response)
 
     ## Set new card limit
-    #set_new_card_limit_response = set_new_card_limit(deck_id, 50)
-    #print(set_new_card_limit_response)
+    set_new_card_limit_response = set_new_card_limit(deck_id, 50)
+    print(set_new_card_limit_response)
 
     ## Set current deck
-    #set_current_deck_response = set_current_deck(deck_id)
-    #print(set_current_deck_response)
+    set_current_deck_response = set_current_deck(deck_id)
+    print(set_current_deck_response)
 
     ## Create a configuration
-    #get_deck_config_response = get_deck_config(deck_id)
-    #print(get_deck_config_response)
-    #deck_config = get_deck_config_response.json()['config']
+    get_deck_config_response = get_deck_config(deck_id)
+    print('\n\n-------\n\n', get_deck_config_response, '\n\n------\n\n')
+    deck_config = get_deck_config_response['config']
+    deck_config_enums = get_deck_config_enums()
+    for key, value in deck_config_enums.items():
+        print("\n", key, ":\n")
+        for enum_key, enum_value in value.items():
+            print(f"{enum_key}: {enum_value}")
 
-    #create_config_response = create_config(
-    #    "Custom Config",
-    #    new_cards_per_day=20,
-    #    review_cards_per_day=100,
-    #    new_mix=deck_config.DeckConfig.Config.ReviewMix.REVIEW_MIX_MIX_WITH_REVIEWS,
-    #    interday_learning_mix=deck_config.DeckConfig.Config.ReviewMix.REVIEW_MIX_AFTER_REVIEWS,
-    #    review_order=deck_config.DeckConfig.Config.ReviewCardOrder.REVIEW_CARD_ORDER_DAY
-    #)
-    #print(create_config_response)
+    # Accessing the enums from the dictionary
+    new_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_AFTER_REVIEWS']
+    interday_learning_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_MIX_WITH_REVIEWS']
+    review_order = deck_config_enums['ReviewCardOrder']['REVIEW_CARD_ORDER_RANDOM']
 
-    ## Apply a configuration (assuming config_id is 2)
-    #apply_config_response = apply_config(deck_id, 2)
-    #print(apply_config_response)
+    print(f"new_mix: {new_mix}, interday_learning_mix: {interday_learning_mix}, review_order: {review_order}")
 
-    ## Update deck mix
-    #update_deck_mix_response = update_deck_mix(
-    #    deck_id,
-    #    new_mix=deck_config.DeckConfig.Config.ReviewMix.REVIEW_MIX_BEFORE_REVIEWS,
-    #    interday_learning_mix=deck_config.DeckConfig.Config.ReviewMix.REVIEW_MIX_MIX_WITH_REVIEWS,
-    #    review_order=deck_config.DeckConfig.Config.ReviewCardOrder.REVIEW_CARD_ORDER_RANDOM
-    #)
-    #print(update_deck_mix_response)
+    create_config_response = create_config(
+        "Custom Config",
+        new_cards_per_day=20,
+        review_cards_per_day=100,
+        new_mix=new_mix,
+        interday_learning_mix=interday_learning_mix,
+        review_order=review_order
+    )
+    print(create_config_response)
 
-    ## Delete a deck
-    #delete_deck_response = delete_deck(deck_id)
-    #print(delete_deck_response)
+    # Apply a configuration (assuming config_id is 2)
+    apply_config_response = apply_config(deck_id, 2)
+    print(apply_config_response)
 
-    ## Delete a filtered deck
-    #delete_filtered_deck_response = delete_filtered_deck(deck_id)
-    #print(delete_filtered_deck_response)
+    # Update deck mix
+    update_deck_mix_response = update_deck_mix(
+        1,
+        new_mix=new_mix,
+        interday_learning_mix=interday_learning_mix,
+        review_order=review_order
+    )
+    print(update_deck_mix_response)
 
-    ## Rename a deck
-    #rename_deck_response = rename_deck(deck_id, "Renamed Deck")
-    #print(rename_deck_response)
+    # Rename a deck
+    rename_deck_response = rename_deck(deck_id, "Renamed Deck")
+    print(rename_deck_response)
+    print('\n\n-------------------\n\n')
 
     ## Get all decks
-    #get_decks_response = get_decks()
-    #print(get_decks_response)
+    get_decks_response = get_decks()
+    print(get_decks_response)
+
+    print('\n\n-------------------\n\n')
 
     ## Get a specific deck
-    #get_deck_response = get_deck(deck_id)
-    #print(get_deck_response)
+    get_deck_response = get_deck(deck_id)
+    print(get_deck_response)
+
+    print('\n\n-------------------\n\n')
 
     ## Get cards in a deck
-    #get_cards_in_deck_response = get_cards_in_deck(deck_id)
-    #print(get_cards_in_deck_response)
+    get_cards_in_deck_response = get_cards_in_deck(deck_id)
+    print(get_cards_in_deck_response)
+
+    print('\n\n-------------------\n\n')
 
     ## Get current deck ID
-    #get_current_deck_id_response = get_current_deck_id()
-    #print(get_current_deck_id_response)
+    get_current_deck_id_response = get_current_deck_id()
+    print(get_current_deck_id_response)
+
+    print('\n\n-------------------\n\n')
 
     ## Get current deck
-    #get_current_deck_response = get_current_deck()
-    #print(get_current_deck_response)
+    get_current_deck_response = get_current_deck()
+    print(get_current_deck_response)
+
+    print('\n\n-------------------\n\n')
 
     ## Get active decks
-    #get_active_decks_response = get_active_decks()
-    #print(get_active_decks_response)
+    get_active_decks_response = get_active_decks()
+    print(get_active_decks_response)
+
+
+    print('\n\n-------------------\n\n')
+
+    # Delete a deck
+    delete_deck_response = delete_deck(1)
+    print(delete_deck_response)
+
+
+    print('\n\n-------------------\n\n')
+
+
+    ### Delete a filtered deck
+    delete_filtered_deck_response = delete_filtered_deck(deck_id)
+    print(delete_filtered_deck_response)
