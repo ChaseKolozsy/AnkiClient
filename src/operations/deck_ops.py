@@ -1,6 +1,5 @@
 import requests
 from note_ops import get_notetypes
-import json
 
 BASE_URL = "http://localhost:5001/api/decks"
 
