@@ -3,8 +3,9 @@ from note_ops import get_notetypes
 
 BASE_URL = "http://localhost:5001/api/decks"
 
-def create_deck(deck_name):
-    response = requests.post(f"{BASE_URL}/create/{deck_name}")
+def create_deck(*, deck_name: str, username: str):
+    data = {"deck_name": deck_name, "username": username}
+    response = requests.post(f"{BASE_URL}/create/{deck_name}", json=data)
     return response.json()
 
 def create_filtered_deck(deck_name, search_query, limit, delays):
