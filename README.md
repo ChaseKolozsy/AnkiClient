@@ -56,6 +56,9 @@ For testing purposes, this repository is currently designed to assume that the p
 Each module has test code in the `if __name__ == "__main__":` block, but these will have to be customized with your own data if you want the tests to function. 
 - Data should be kept inside of a `data` directory which should be contained in the root directory of the repository. 
 - Media should be kept inside of the `data/media` directory. 
+- Anki packages should be kept inside of the `data/apkgs` directory.
+- Csv files should be kept inside of the `data/csv_files` directory.
+- Exported files from Anki should be kept inside of the `data/exports` directory under a subdirectory named after the `username`.
 
 ## Contributing
 
