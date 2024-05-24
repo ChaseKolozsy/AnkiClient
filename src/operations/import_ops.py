@@ -1,7 +1,4 @@
 import requests
-from pathlib import Path
-from user_ops import delete_user, create_user
-from deck_ops import create_deck
 
 BASE_URL = "http://localhost:5001"
 
@@ -73,6 +70,10 @@ def upload_media_file(username, media_file_path):
 
 
 if __name__ == "__main__":
+    from user_ops import delete_user, create_user
+    from deck_ops import create_deck
+    from pathlib import Path
+
     username = "testuser"
     print(create_user(username))
 

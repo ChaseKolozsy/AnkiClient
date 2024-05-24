@@ -1,8 +1,4 @@
 import requests
-import user_ops
-import deck_ops
-import import_ops
-from pathlib import Path
 
 BASE_URL = 'http://localhost:5001/api'
 
@@ -51,6 +47,11 @@ def review_session(deck_id: int, username: str):
         choice = input("hit 'q' to quit, else, any key to continue: ")
 
 if __name__ == "__main__":
+    from pathlib import Path
+    import user_ops
+    import deck_ops
+    import import_ops
+
     username = "testuser"
     response = user_ops.create_user(username)
     print(response)

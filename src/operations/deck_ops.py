@@ -1,5 +1,4 @@
 import requests
-from note_ops import get_notetypes
 
 BASE_URL = "http://localhost:5001/api/decks"
 
@@ -143,6 +142,8 @@ def get_deck_config(deck_id, username):
 
 
 if __name__ == "__main__":
+    from note_ops import get_notetypes
+
     # Assuming get_notetypes is defined elsewhere and returns a list of notetypes
     notetypes = get_notetypes()
     notetype_dict = {}

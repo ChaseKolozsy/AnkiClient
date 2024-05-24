@@ -1,7 +1,4 @@
 import requests
-from pathlib import Path
-from user_ops import create_user, delete_user
-from import_ops import upload_anki_package, upload_csv_file
 
 BASE_URL = 'http://localhost:5001/api'
 
@@ -53,6 +50,10 @@ def get_exported_notes_csv(*,
         return response.json()
 
 if __name__ == '__main__':
+    from user_ops import create_user, delete_user
+    from import_ops import upload_anki_package, upload_csv_file
+    from pathlib import Path
+
     username = 'test_user'
     print(create_user(username))
 

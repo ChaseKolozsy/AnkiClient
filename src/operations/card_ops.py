@@ -1,6 +1,4 @@
 import requests
-import note_ops
-import requests
 from typing import List, Dict, Any, Optional
 
 BASE_URL = "http://localhost:5001/api/cards"
@@ -276,6 +274,8 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
+    import note_ops
+
     notetypes = note_ops.get_notetypes()
     notetype_dict = {}
     if notetypes:
