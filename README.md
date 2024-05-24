@@ -36,17 +36,6 @@ To install the necessary dependencies, run:
 pip install requests 
 ```
 
-## Usage
-
-### Initialize Server
-
-To initialize the server, (modify as you please, temporary for testing)
-
-```sh
-python src/initialize_Server.py
-```
-
-
 ## Operations
 
 The `operations` directory contains various modules for managing different aspects of Anki:
@@ -59,6 +48,11 @@ The `operations` directory contains various modules for managing different aspec
 - `import_ops.py`: Import-related operations
 - `export_ops.py`: Export-related operations
 - `card_ops.py`: Card-related operations
+
+## Usage
+
+Each operation is designed to be used as a module, allowing for easy integration into your own scripts or applications.
+Each module has test code in the `if __name__ == "__main__":` block, but these will have to be customized with your own data if you want the tests to function. data should be kept inside of a data directory which should be contained in the root directory of the repository. This is currently designed to assume that the project and the repository are located in the same root directory. 
 
 ## Contributing
 
