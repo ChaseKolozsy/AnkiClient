@@ -3,106 +3,147 @@ from note_ops import get_notetypes
 
 BASE_URL = "http://localhost:5001/api/decks"
 
-def create_deck(*, deck_name: str, username: str):
-    data = {"deck_name": deck_name, "username": username}
-    response = requests.post(f"{BASE_URL}/create/{deck_name}", json=data)
+def create_deck(deck_name, username):
+    url = f"{BASE_URL}/create/{deck_name}"
+    data = {"username": username}
+    response = requests.post(url, json=data)
     return response.json()
 
-def create_filtered_deck(deck_name, search_query, limit, delays):
+def change_deck_notetype(deck_id, new_notetype_id, username, match_by_name=True):
+    url = f"{BASE_URL}/{deck_id}/change-notetype"
     data = {
-        "deck_name": deck_name,
-        "search_query": search_query,
-        "limit": limit,
-        "delays": delays
+        "new_notetype_id": new_notetype_id,
+        "match_by_name": match_by_name,
+        "username": username
     }
-    response = requests.post(f"{BASE_URL}/create-filtered", json=data)
+    response = requests.post(url, json=data)
     return response.json()
 
-def change_deck_notetype(deck_id, new_notetype_id):
-    data = {"new_notetype_id": new_notetype_id}
-    response = requests.post(f"{BASE_URL}/{deck_id}/change-notetype", json=data)
+def set_new_card_limit(deck_id, new_card_limit, username):
+    url = f"{BASE_URL}/{deck_id}/set-new-card-limit"
+    data = {
+        "new_card_limit": new_card_limit,
+        "username": username
+    }
+    response = requests.post(url, json=data)
     return response.json()
 
-def set_new_card_limit(deck_id, new_card_limit):
-    data = {"new_card_limit": new_card_limit}
-    response = requests.post(f"{BASE_URL}/{deck_id}/set-new-card-limit", json=data)
+def set_current_deck(deck_id, username):
+    url = f"{BASE_URL}/set-current/{deck_id}"
+    data = {"username": username}
+    response = requests.post(url, json=data)
     return response.json()
 
-def set_current_deck(deck_id):
-    response = requests.post(f"{BASE_URL}/set-current/{deck_id}")
-    return response.json()
-
-def create_config(name, new_cards_per_day, review_cards_per_day, new_mix, interday_learning_mix, review_order):
+def create_config(*, 
+                  name: str, 
+                  new_cards_per_day: int, 
+                  review_cards_per_day: int, 
+                  new_mix: int, 
+                  interday_learning_mix: int, 
+                  review_order: int, 
+                  username: str) -> dict:
+    url = f"{BASE_URL}/config/create"
     data = {
         "name": name,
         "new_cards_per_day": new_cards_per_day,
         "review_cards_per_day": review_cards_per_day,
         "new_mix": new_mix,
         "interday_learning_mix": interday_learning_mix,
-        "review_order": review_order
+        "review_order": review_order,
+        "username": username
     }
-    response = requests.post(f"{BASE_URL}/config/create", json=data)
+    response = requests.post(url, json=data)
     return response.json()
 
-def apply_config(deck_id, config_id):
-    data = {"config_id": config_id}
-    response = requests.post(f"{BASE_URL}/{deck_id}/config/apply", json=data)
+def apply_config(deck_id, config_id, username):
+    url = f"{BASE_URL}/{deck_id}/config/apply"
+    data = {
+        "config_id": config_id,
+        "username": username
+    }
+    response = requests.post(url, json=data)
     return response.json()
 
-def update_deck_mix(deck_id, new_mix, interday_learning_mix, review_order):
+def update_deck_mix(deck_id, new_mix, interday_learning_mix, review_order, username):
+    url = f"{BASE_URL}/{deck_id}/update_mix"
     data = {
         "new_mix": new_mix,
         "interday_learning_mix": interday_learning_mix,
-        "review_order": review_order
+        "review_order": review_order,
+        "username": username
     }
-    response = requests.post(f"{BASE_URL}/{deck_id}/update_mix", json=data)
+    response = requests.post(url, json=data)
     return response.json()
 
-def delete_deck(deck_id):
-    response = requests.delete(f"{BASE_URL}/delete/{deck_id}")
+def delete_deck(deck_id, username):
+    url = f"{BASE_URL}/delete/{deck_id}"
+    data = {"username": username}
+    response = requests.delete(url, json=data)
     return response.json()
 
-def delete_filtered_deck(deck_id):
-    response = requests.delete(f"{BASE_URL}/delete-filtered/{deck_id}")
+def delete_filtered_deck(deck_id, username):
+    url = f"{BASE_URL}/delete-filtered/{deck_id}"
+    data = {"username": username}
+    response = requests.delete(url, json=data)
     return response.json()
 
-def rename_deck(deck_id, new_name):
-    response = requests.put(f"{BASE_URL}/rename/{deck_id}/{new_name}")
+def rename_deck(deck_id, new_name, username):
+    url = f"{BASE_URL}/rename/{deck_id}/{new_name}"
+    data = {"username": username}
+    response = requests.put(url, json=data)
     return response.json()
 
 def get_decks(username):
-    response = requests.get(f"{BASE_URL}", json={"username": username})
+    url = BASE_URL
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
-def get_deck(deck_id):
-    response = requests.get(f"{BASE_URL}/{deck_id}")
+def get_deck(deck_id, username):
+    url = f"{BASE_URL}/{deck_id}"
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
-def get_cards_in_deck(deck_id):
-    response = requests.get(f"{BASE_URL}/{deck_id}/cards")
+def get_cards_in_deck(deck_id, username):
+    url = f"{BASE_URL}/{deck_id}/cards"
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
-def get_current_deck_id():
-    response = requests.get(f"{BASE_URL}/get-current-id")
+def get_current_deck_id(username):
+    url = f"{BASE_URL}/get-current-id"
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
-def get_current_deck():
-    response = requests.get(f"{BASE_URL}/current")
+def get_current_deck(username):
+    url = f"{BASE_URL}/current"
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
-def get_active_decks():
-    response = requests.get(f"{BASE_URL}/active")
-    return response.json()
-
-def get_deck_config(deck_id):
-    response = requests.get(f"{BASE_URL}/{deck_id}/config")
+def get_active_decks(username):
+    url = f"{BASE_URL}/active"
+    data = {"username": username}
+    response = requests.get(url, json=data)
     return response.json()
 
 def get_deck_config_enums():
-    response = requests.get(f"{BASE_URL}/config/enums")
+    url = f"{BASE_URL}/config/enums"
+    url = f"{BASE_URL}/config/enums"
+    response = requests.get(url)
     return response.json()
 
+def get_deck_config(deck_id, username):
+    url = f"{BASE_URL}/{deck_id}/config"
+    data = {"username": username}
+    response = requests.get(url, json=data)
+    return response.json()
+
+
 if __name__ == "__main__":
+    # Assuming get_notetypes is defined elsewhere and returns a list of notetypes
     notetypes = get_notetypes()
     notetype_dict = {}
     if notetypes:
@@ -113,26 +154,28 @@ if __name__ == "__main__":
 
     # Assuming the 'Basic' notetype ID is 1 (as per your instruction)
     basic_notetype_id = notetype_dict['Basic']
+    username = "your_username"  # Replace with the actual username
+
     # Create a deck
-    create_deck_response = create_deck("New Deck")
+    create_deck_response = create_deck("New Deck", username)
     print(create_deck_response)
     deck_id = create_deck_response['id']
     print(f"deck_id: {deck_id}")
 
-    ## Change deck notetype
-    change_deck_notetype_response = change_deck_notetype(deck_id, basic_notetype_id)
+    # Change deck notetype
+    change_deck_notetype_response = change_deck_notetype(deck_id, basic_notetype_id, username)
     print(change_deck_notetype_response)
 
-    ## Set new card limit
-    set_new_card_limit_response = set_new_card_limit(deck_id, 50)
+    # Set new card limit
+    set_new_card_limit_response = set_new_card_limit(deck_id, 50, username)
     print(set_new_card_limit_response)
 
-    ## Set current deck
-    set_current_deck_response = set_current_deck(deck_id)
+    # Set current deck
+    set_current_deck_response = set_current_deck(deck_id, username)
     print(set_current_deck_response)
 
-    ## Create a configuration
-    get_deck_config_response = get_deck_config(deck_id)
+    # Create a configuration
+    get_deck_config_response = get_deck_config(deck_id, username)
     print('\n\n-------\n\n', get_deck_config_response, '\n\n------\n\n')
     deck_config = get_deck_config_response['config']
     deck_config_enums = get_deck_config_enums()
@@ -149,78 +192,76 @@ if __name__ == "__main__":
     print(f"new_mix: {new_mix}, interday_learning_mix: {interday_learning_mix}, review_order: {review_order}")
 
     create_config_response = create_config(
-        "Custom Config",
+        name="Custom Config",
         new_cards_per_day=20,
         review_cards_per_day=100,
         new_mix=new_mix,
         interday_learning_mix=interday_learning_mix,
-        review_order=review_order
+        review_order=review_order,
+        username=username
     )
     print(create_config_response)
 
     # Apply a configuration (assuming config_id is 2)
-    apply_config_response = apply_config(deck_id, 2)
+    apply_config_response = apply_config(deck_id, 2, username)
     print(apply_config_response)
 
     # Update deck mix
     update_deck_mix_response = update_deck_mix(
-        1,
+        deck_id,
         new_mix=new_mix,
         interday_learning_mix=interday_learning_mix,
-        review_order=review_order
+        review_order=review_order,
+        username=username
     )
     print(update_deck_mix_response)
 
     # Rename a deck
-    rename_deck_response = rename_deck(deck_id, "Renamed Deck")
+    rename_deck_response = rename_deck(deck_id, "Renamed Deck", username)
     print(rename_deck_response)
     print('\n\n-------------------\n\n')
 
-    ## Get all decks
-    get_decks_response = get_decks()
+    # Get all decks
+    get_decks_response = get_decks(username)
     print(get_decks_response)
 
     print('\n\n-------------------\n\n')
 
-    ## Get a specific deck
-    get_deck_response = get_deck(deck_id)
+    # Get a specific deck
+    get_deck_response = get_deck(deck_id, username)
     print(get_deck_response)
 
     print('\n\n-------------------\n\n')
 
-    ## Get cards in a deck
-    get_cards_in_deck_response = get_cards_in_deck(deck_id)
+    # Get cards in a deck
+    get_cards_in_deck_response = get_cards_in_deck(deck_id, username)
     print(get_cards_in_deck_response)
 
     print('\n\n-------------------\n\n')
 
-    ## Get current deck ID
-    get_current_deck_id_response = get_current_deck_id()
+    # Get current deck ID
+    get_current_deck_id_response = get_current_deck_id(username)
     print(get_current_deck_id_response)
 
     print('\n\n-------------------\n\n')
 
-    ## Get current deck
-    get_current_deck_response = get_current_deck()
+    # Get current deck
+    get_current_deck_response = get_current_deck(username)
     print(get_current_deck_response)
 
     print('\n\n-------------------\n\n')
 
-    ## Get active decks
-    get_active_decks_response = get_active_decks()
+    # Get active decks
+    get_active_decks_response = get_active_decks(username)
     print(get_active_decks_response)
 
-
     print('\n\n-------------------\n\n')
 
-    # Delete a deck
-    delete_deck_response = delete_deck(1)
+    delete_deck_response = delete_deck(deck_id, username)
     print(delete_deck_response)
 
-
     print('\n\n-------------------\n\n')
 
-
-    ### Delete a filtered deck
-    delete_filtered_deck_response = delete_filtered_deck(deck_id)
+    # Delete a filtered deck
+    delete_filtered_deck_response = delete_filtered_deck(deck_id, username)
     print(delete_filtered_deck_response)

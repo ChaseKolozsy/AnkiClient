@@ -1,152 +1,98 @@
 import requests
 
-def get_notetypes():
-    url = "http://localhost:5001/api/notetypes/notes"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+BASE_URL = "http://localhost:5001/api/notetypes"
 
-def get_sort_field(notetype_id):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/get-sort-field"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def get_notetypes(username):
+    response = requests.get(f"{BASE_URL}/notes", json={"username": username})
+    return response.json()
 
-def get_notetype_css(notetype_id):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/css"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def get_notetype_id_by_card_id(card_id, username):
+    response = requests.get(f"{BASE_URL}/cards/{card_id}/notetype", json={"username": username})
+    return response.json()
 
-def get_notetype_templates(notetype_id):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/templates"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
-
-def get_notetype_fields(notetype_id):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/fields"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
-
-
-def add_field_to_notetype(notetype_id, field_name):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/fields"
-    data = { "field_name": field_name}
-    print(f"Attempting to Add field {field_name} to notetype {notetype_id}")
-    try:
-        response = requests.post(url, json=data)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(response.json())
-        print(f"An error occurred: {e}")
-        return None
-
-def delete_field_from_note(notetype_id, field_name):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/fields/{field_name}"
-
-    try:
-        response = requests.delete(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        print(response.json())
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
-
-def create_notetype_with_fields(notetype_name, field_names, base_notetype_id):
-    url = "http://localhost:5001/api/notetypes/create-with-fields"
+def create_notetype_with_fields(name, fields, base_notetype_id, qfmt, afmt, username):
     data = {
-        "name": notetype_name,
-        "fields": field_names,
-        "base_notetype_id": base_notetype_id
+        "name": name,
+        "fields": fields,
+        "base_notetype_id": base_notetype_id,
+        "qfmt": qfmt,
+        "afmt": afmt,
+        "username": username
     }
+    response = requests.post(f"{BASE_URL}/create-with-fields", json=data)
+    return response.json()
 
-    try:
-        response = requests.post(url, json=data)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        if 'response' in locals():
-            print(response.json())
-        return None
+def set_sort_field(notetype_id, field_name, username):
+    data = {
+        "field_name": field_name,
+        "username": username
+    }
+    response = requests.post(f"{BASE_URL}/{notetype_id}/set-sort-field", json=data)
+    return response.json()
 
-def set_sort_field(notetype_id, field_name):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/set-sort-field"
-    data = {"field_name": field_name}
+def reorder_fields(notetype_id, new_order, username):
+    data = {
+        "new_order": new_order,
+        "username": username
+    }
+    response = requests.post(f"{BASE_URL}/{notetype_id}/reorder-fields", json=data)
+    return response.json()
 
-    try:
-        response = requests.post(url, json=data)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def add_template_to_notetype(notetype_id, template_name, qfmt, afmt, username):
+    data = {
+        "template_name": template_name,
+        "qfmt": qfmt,
+        "afmt": afmt,
+        "username": username
+    }
+    response = requests.post(f"{BASE_URL}/{notetype_id}/add-template", json=data)
+    return response.json()
 
-def reorder_notetype_fields(notetype_id, new_order):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/reorder-fields"
-    data = {"new_order": new_order}
+def update_notetype_css(notetype_id, new_css, username):
+    data = {
+        "css": new_css,
+        "username": username
+    }
+    response = requests.post(f"{BASE_URL}/{notetype_id}/update-css", json=data)
+    return response.json()
 
-    try:
-        response = requests.post(url, json=data)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def add_field_to_notetype(notetype_id, field_name, username):
+    data = {
+        "field_name": field_name,
+        "username": username
+    }
+    response = requests.post(f"{BASE_URL}/{notetype_id}/fields", json=data)
+    return response.json()
 
-def delete_notetype_by_id(notetype_id):
-    url = f"http://localhost:5001/api/notetypes/{notetype_id}/delete"
+def get_notetype_css(notetype_id, username):
+    response = requests.get(f"{BASE_URL}/{notetype_id}/css", json={"username": username})
+    return response.json()
 
-    try:
-        response = requests.delete(url)
-        response.raise_for_status()  # Raise an error for bad status codes
+def get_notetype_templates(notetype_id, username):
+    response = requests.get(f"{BASE_URL}/{notetype_id}/templates", json={"username": username})
+    return response.json()
 
-        if response.status_code == 200:
-            return "Notetype deleted successfully"
-        else:
-            return "Failed to delete notetype"
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def get_notetype_fields(notetype_id, username):
+    response = requests.get(f"{BASE_URL}/{notetype_id}/fields", json={"username": username})
+    return response.json()
 
-def get_notetype_id_by_card_id(card_id):
-    url = f"http://localhost:5001/api/cards/{card_id}/notetype"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad status codes
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
+def get_sort_field(notetype_id, username):
+    response = requests.get(f"{BASE_URL}/{notetype_id}/get-sort-field", json={"username": username})
+    return response.json()
 
+def remove_field_from_notetype(notetype_id, field_name, username):
+    response = requests.delete(f"{BASE_URL}/{notetype_id}/fields/{field_name}", json={"username": username})
+    return response.json()
+
+def delete_notetype(notetype_id, username):
+    response = requests.delete(f"{BASE_URL}/{notetype_id}/delete", json={"username": username})
+    return response.json()
 
 # Example usage
 if __name__ == "__main__":
-    notetypes = get_notetypes()
+    username = "your_username"  # Replace with the actual username
+
+    notetypes = get_notetypes(username)
     notetype_dict = {}
     if notetypes:
         print("Notetypes retrieved successfully:")
@@ -160,22 +106,22 @@ if __name__ == "__main__":
         notetype_id = notetype_dict['Basic']
         
         print("\nSort Field:")
-        sort_field = get_sort_field(notetype_id)
+        sort_field = get_sort_field(notetype_id, username)
         print(sort_field)
 
         print("\nCSS:")
-        css = get_notetype_css(notetype_id)
+        css = get_notetype_css(notetype_id, username)
         print(css)
 
         print("\nTemplates:")
-        templates = get_notetype_templates(notetype_id)
+        templates = get_notetype_templates(notetype_id, username)
         print(templates)
 
         print("\nFields:")
-        fields = get_notetype_fields(notetype_id)
+        fields = get_notetype_fields(notetype_id, username)
         print(fields)
 
-    print(add_field_to_notetype(notetype_dict['Basic'], "More Info"), '\n\n')
+    print(add_field_to_notetype(notetype_dict['Basic'], "More Info", username), '\n\n')
     print("changing order: \n")
 
     notetype_id = notetype_dict['Basic']
@@ -184,34 +130,34 @@ if __name__ == "__main__":
         "Back": 1,
         "More Info": 0  
     }
-    result = reorder_notetype_fields(notetype_id, new_order)
+    result = reorder_fields(notetype_id, new_order, username)
 
-    fields = get_notetype_fields(notetype_dict['Basic'])
+    fields = get_notetype_fields(notetype_dict['Basic'], username)
     print(fields)
 
-    result = set_sort_field(notetype_dict['Basic'], "More Info")
-    sort_field = get_sort_field(notetype_id)
+    result = set_sort_field(notetype_dict['Basic'], "More Info", username)
+    sort_field = get_sort_field(notetype_id, username)
     print(sort_field)
 
-    result = set_sort_field(notetype_dict['Basic'], "Front")
-    sort_field = get_sort_field(notetype_id)
+    result = set_sort_field(notetype_dict['Basic'], "Front", username)
+    sort_field = get_sort_field(notetype_id, username)
     print(sort_field)
     
-    delete_field_from_note(notetype_dict['Basic'], "More Info")
+    remove_field_from_notetype(notetype_dict['Basic'], "More Info", username)
     print('\n\n')
     notetype_id = notetype_dict['Basic']
     new_order = {
         "Front": 0,
         "Back": 1,
     }
-    result = reorder_notetype_fields(notetype_id, new_order)
+    result = reorder_fields(notetype_id, new_order, username)
 
-    fields = get_notetype_fields(notetype_dict['Basic'])
+    fields = get_notetype_fields(notetype_dict['Basic'], username)
     print(fields)
 
-    print(create_notetype_with_fields("New Notetype", ["Field1", "Field2"], notetype_dict['Basic']), '\n\n')
+    print(create_notetype_with_fields("New Notetype", ["Field1", "Field2"], notetype_dict['Basic'], None, None, username), '\n\n')
 
-    notetypes = get_notetypes()
+    notetypes = get_notetypes(username)
     notetype_dict = {}
     if notetypes:
         print("Notetypes retrieved successfully:")
@@ -223,9 +169,9 @@ if __name__ == "__main__":
 
     for notetype in notetype_dict:
         if 'New Notetype' in notetype:
-            result = delete_notetype_by_id(notetype_dict[notetype])
+            result = delete_notetype(notetype_dict[notetype], username)
 
-    notetypes = get_notetypes()
+    notetypes = get_notetypes(username)
     notetype_dict = {}
     if notetypes:
         print("Notetypes retrieved successfully:")
@@ -237,4 +183,4 @@ if __name__ == "__main__":
 
     for notetype in notetype_dict:
         if 'New Notetype' in notetype:
-            result = delete_notetype_by_id(notetype_dict[notetype])
+            result = delete_notetype(notetype_dict[notetype], username)
