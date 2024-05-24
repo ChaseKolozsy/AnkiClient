@@ -17,12 +17,6 @@ AnkiClient is a Python-based client that interacts with Anki to manage decks, ca
 
 ```
 src/
-├── Misc. Test Scripts:
-|   ├── import_media.py
-|   ├── import_decks.py
-|   ├── create_card.py
-|   ├── initialize_Server.py
-|   ├── view_cards.py
 ├── operations/
 │   ├── deck_ops.py
 │   ├── study_ops.py
