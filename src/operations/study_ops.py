@@ -13,7 +13,7 @@ def study(*, deck_id: int, action: str, username: str, base_url: str = BASE_URL)
     return response.json(), response.status_code
 
 def create_custom_study_session(*, username: str, deck_id: int, custom_study_params: dict, base_url: str = BASE_URL) -> tuple[dict, int]:
-    url = f"{base_url}/custom_study"
+    url = f"{base_url}/custom-study"
     payload = {
         "username": username,
         "deck_id": deck_id,
