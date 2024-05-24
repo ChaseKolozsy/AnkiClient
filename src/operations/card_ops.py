@@ -274,9 +274,38 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    import note_ops
+    from note_ops import get_notetypes
+    from user_ops import create_user, delete_user
+    from deck_ops import create_deck
+    from import_ops import upload_anki_package, upload_csv_file
+    from pathlib import Path
 
-    notetypes = note_ops.get_notetypes()
+    ## ----------------------------------- Initialize ------------------------------------- ##
+    username = "User 1"  # Replace with the actual username
+    print(create_user(username))
+    deck_id = create_deck(deck_name="testdeck", username=username)['id']
+    print(deck_id)
+    create_deck(deck_name="Hungarian", username=username)
+
+    file_name = '0_Video_Segments.apkg'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
+    upload_anki_package(username, file_path)
+
+    notetype = 'Basic' 
+    deck_name = 'Hungarian'
+    delimiter = 'TAB'
+
+    file_name = 'Food-recite.txt'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+
+    file_name = 'Directions-recite.txt'
+    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+
+
+
+    notetypes = get_notetypes(username)
     notetype_dict = {}
     if notetypes:
         print("Notetypes retrieved successfully:")
@@ -285,6 +314,8 @@ if __name__ == "__main__":
             notetype_dict[notetype['name']] = notetype['id']
     else:
         print("Failed to retrieve notetypes.")
+
+    ## ----------------------------------- Test Cards ------------------------------------- ##
 
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Norway?", "Back": "Oslo"}, tags=["geography", "capitals"])
     print(response, '\n\n')
@@ -311,19 +342,27 @@ if __name__ == "__main__":
     response = get_cards_by_tag_and_state(tag="Food", state="new", username="User 1")
     print(response, '\n\n')
 
-    print("\n\n-------------------------------------------\n\n")
+    print("\n\n---------------- Change card notetype ---------------------------\n\n")
 
     response = change_card_notetype(note_id=card_id, username="User 1", new_notetype_id=notetype_dict["Basic (type in the answer)"], match_by_name=False)
     print(response, '\n\n')
+    
+    print("\n\n---------------- Get card contents ---------------------------\n\n")
 
     response = get_card_contents(card_id=card_id, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Change notetype by tag ---------------------------\n\n")
+
     response = change_notetype_by_tag(tag="geography", new_notetype_id=notetype_dict["Basic (type in the answer)"], username="User 1", match_by_name=True)
     print(response, '\n\n')
 
+    print("\n\n---------------- Change notetype by deck ---------------------------\n\n")
+
     response = change_notetype_by_current(current_notetype_id=notetype_dict["Basic (type in the answer)"], new_notetype_id=notetype_dict["Basic"], username="User 1", match_by_name=True)
     print(response, '\n\n')
+
+    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
 
     response = get_cards_by_tag(tag="geography", username="User 1")
     print(f"status: {response}")
@@ -331,14 +370,22 @@ if __name__ == "__main__":
         print(card['id'])
     card_ids = [int(card['id']) for card in response]
 
-    response = move_cards(card_ids=card_ids, target_deck_name="Hungarian", username="User 1")
+    print("\n\n---------------- Move cards ---------------------------\n\n")
+
+    response = move_cards(card_ids=card_ids, target_deck_name="Hungarian", username=username)
     print(response, '\n\n')
+
+    print("\n\n---------------- Delete card ---------------------------\n\n")
 
     response = delete_card(card_id=card_id, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Delete cards by tag ---------------------------\n\n")
+
     response = delete_cards_by_tag(tag="geography", username="User 1")
     print(response, '\n\n')
+
+    print("\n\n---------------- Create cards ---------------------------\n\n")
 
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Norway?", "Back": "Oslo"}, tags=["geography", "capitals"])
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Denmark?", "Back": "Copenhagen"}, tags=["geography", "capitals"])
@@ -349,8 +396,12 @@ if __name__ == "__main__":
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of UK?", "Back": "London"}, tags=["geography", "capitals"])
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Sweden?", "Back": "Stockholm"}, tags=["geography", "capitals"])
 
+    print("\n\n---------------- Delete cards by deck ---------------------------\n\n")
+
     response = delete_cards_by_deck(deck="1", username="User 1")
     print(response, '\n\n')
+
+    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
 
     response = get_cards_by_tag(tag="geography", username="User 1")
     print(f"status: {response}")
@@ -359,6 +410,8 @@ if __name__ == "__main__":
             print(card['id'])
     else:
         print("No cards to delete")
+
+    print("\n\n---------------- Create cards ---------------------------\n\n")
 
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Norway?", "Back": "Oslo"}, tags=["geography", "capitals"])
     response = create_card(username="User 1", note_type="Basic", deck_id=1, fields={"Front": "What is the capital of Denmark?", "Back": "Copenhagen"}, tags=["geography", "capitals"])
@@ -374,42 +427,69 @@ if __name__ == "__main__":
     else:
         print("Failed to create cards")
 
+    print("\n\n---------------- Reschedule card ---------------------------\n\n")
+
     response = reschedule_card(card_id=card_id, new_due_date="7", username="User 1")
     print(response, '\n\n')
+
+    print("\n\n---------------- Reschedule cards by tag ---------------------------\n\n")
 
     response = reschedule_cards_by_tag(tag="geography", username="User 1", start_days=7, end_days=21, only_if_due=False)
     print(response, '\n\n')
 
+    print("\n\n---------------- Reschedule cards by deck ---------------------------\n\n")
+
     response = reschedule_cards_by_deck(deck_id=1, username="User 1", start_days=9, end_days=27, only_if_due=False)
     print(response, '\n\n')
+
+    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
 
     response = get_cards_by_tag(tag="geography", username="User 1")
     for card in response:
         print(card)
+
+    print("\n\n---------------- Get cards by state ---------------------------\n\n")
 
     response = get_cards_by_state(deck_id=1, state="due", username="User 1")
     print(response, '\n\n')
 
-    print("\n\n-------------------------------------------\n\n")
+    print("\n\n---------------- Reset card ---------------------------\n\n")
 
     response = reset_card(card_id=card_id)
     print(response, '\n\n')
 
+    print("\n\n---------------- Reset cards by tag ---------------------------\n\n")
+
     response = reset_cards_by_tag(tag="geography", username="User 1")
     print(response, '\n\n')
+
+    print("\n\n---------------- Reset cards by deck ---------------------------\n\n")
 
     response = reset_cards_by_deck(deck_id=1, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Reposition card ---------------------------\n\n")
+
     response = reposition_card(card_id=card_id, new_position=99, username="User 1")
     print(response, '\n\n')
+
+    print("\n\n---------------- Reposition cards by tag ---------------------------\n\n")
 
     response = reposition_cards_by_tag(tag="geography", new_position=1, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Reposition cards by deck ---------------------------\n\n")
+
+    response = reposition_cards_by_deck(deck_id=1, new_position=1000, username="User 1")
+    print(response, '\n\n')
+
+    print("\n\n---------------- Get Cards by tag ---------------------------\n\n")
+
     response = get_cards_by_tag(tag="geography", username="User 1")
     for card in response:
         print(card)
+
+    print("\n\n---------------- Reposition cards by deck ---------------------------\n\n")
 
     response = reposition_cards_by_deck(deck_id=1, new_position=1000, username="User 1")
     print(response, '\n\n') 
@@ -417,31 +497,44 @@ if __name__ == "__main__":
     for card in response:
         print(card)
 
+    print("\n\n---------------- Suspend card ---------------------------\n\n")
     response = suspend_card(card_id=card_id, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Suspend cards by tag ---------------------------\n\n")
     response = suspend_cards_by_tag(tag="geography", username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Suspend cards by deck ---------------------------\n\n")
     response = suspend_cards_by_deck(deck_id=1, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
     response = get_cards_by_tag(tag="geography", username="User 1")
     for card in response:
         print(card)
 
+    print("\n\n---------------- Bury card ---------------------------\n\n")
     response = bury_card(card_id=card_id, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Bury cards by tag ---------------------------\n\n")
     response = bury_cards_by_tag(tag="geography", username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Bury cards by deck ---------------------------\n\n")
     response = bury_cards_by_deck(deck_id=1, username="User 1")
     print(response, '\n\n')
 
+    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
     response = get_cards_by_tag(tag="geography", username="User 1")
     for card in response:
         print(card)
 
+    print("\n\n---------------- Delete cards by deck ---------------------------\n\n")
     response = delete_cards_by_deck(deck="1", username="User 1")
     print(response, '\n\n')
+
+
+    delete_user(username)
+

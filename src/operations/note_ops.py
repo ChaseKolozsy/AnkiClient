@@ -1,4 +1,3 @@
-from pathlib import Path
 import requests
 
 BASE_URL = "http://localhost:5001/api/notetypes"
@@ -94,6 +93,7 @@ if __name__ == "__main__":
     from user_ops import create_user, delete_user
     from deck_ops import create_deck
     from import_ops import upload_anki_package, upload_csv_file
+    from pathlib import Path
 
     ## ----------------------------------- Initialize ------------------------------------- ##
     username = "test_user"  # Replace with the actual username
@@ -129,88 +129,89 @@ if __name__ == "__main__":
     else:
         print("Failed to retrieve notetypes.")
 
-    #if 'Basic' in notetype_dict:
-    #    notetype_id = notetype_dict['Basic']
-    #    
-    #    print("\nSort Field:")
-    #    sort_field = get_sort_field(notetype_id, username)
-    #    print(sort_field)
+    if 'Basic' in notetype_dict:
+        notetype_id = notetype_dict['Basic']
+        
+        print("\nSort Field:")
+        sort_field = get_sort_field(notetype_id, username)
+        print(sort_field)
 
-    #    print("\nCSS:")
-    #    css = get_notetype_css(notetype_id, username)
-    #    print(css)
+        print("\nCSS:")
+        css = get_notetype_css(notetype_id, username)
+        print(css)
 
-    #    print("\nTemplates:")
-    #    templates = get_notetype_templates(notetype_id, username)
-    #    print(templates)
+        print("\nTemplates:")
+        templates = get_notetype_templates(notetype_id, username)
+        print(templates)
 
-    #    print("\nFields:")
-    #    fields = get_notetype_fields(notetype_id, username)
-    #    print(fields)
+        print("\nFields:")
+        fields = get_notetype_fields(notetype_id, username)
+        print(fields)
 
-    #print(add_field_to_notetype(notetype_dict['Basic'], "More Info", username), '\n\n')
-    #print("changing order: \n")
+    print(add_field_to_notetype(notetype_dict['Basic'], "More Info", username), '\n\n')
+    print("changing order: \n")
 
-    #notetype_id = notetype_dict['Basic']
-    #new_order = {
-    #    "Front": 2,
-    #    "Back": 1,
-    #    "More Info": 0  
-    #}
-    #result = reorder_fields(notetype_id, new_order, username)
+    notetype_id = notetype_dict['Basic']
+    new_order = {
+        "Front": 2,
+        "Back": 1,
+        "More Info": 0  
+    }
+    result = reorder_fields(notetype_id, new_order, username)
 
-    #fields = get_notetype_fields(notetype_dict['Basic'], username)
-    #print(fields)
+    fields = get_notetype_fields(notetype_dict['Basic'], username)
+    print(fields)
 
-    #result = set_sort_field(notetype_dict['Basic'], "More Info", username)
-    #sort_field = get_sort_field(notetype_id, username)
-    #print(sort_field)
+    result = set_sort_field(notetype_dict['Basic'], "More Info", username)
+    sort_field = get_sort_field(notetype_id, username)
+    print(sort_field)
 
-    #result = set_sort_field(notetype_dict['Basic'], "Front", username)
-    #sort_field = get_sort_field(notetype_id, username)
-    #print(sort_field)
+    result = set_sort_field(notetype_dict['Basic'], "Front", username)
+    sort_field = get_sort_field(notetype_id, username)
+    print(sort_field)
     
-    #remove_field_from_notetype(notetype_dict['Basic'], "More Info", username)
-    #print('\n\n')
-    #notetype_id = notetype_dict['Basic']
-    #new_order = {
-    #    "Front": 0,
-    #    "Back": 1,
-    #}
-    #result = reorder_fields(notetype_id, new_order, username)
+    remove_field_from_notetype(notetype_dict['Basic'], "More Info", username)
+    print('\n\n')
+    notetype_id = notetype_dict['Basic']
+    new_order = {
+        "Front": 0,
+        "Back": 1,
+    }
+    result = reorder_fields(notetype_id, new_order, username)
 
-    #fields = get_notetype_fields(notetype_dict['Basic'], username)
-    #print(fields)
+    fields = get_notetype_fields(notetype_dict['Basic'], username)
+    print(fields)
 
-    #print(create_notetype_with_fields("New Notetype", ["Field1", "Field2"], notetype_dict['Basic'], None, None, username), '\n\n')
+    print(create_notetype_with_fields("New Notetype", ["Field1", "Field2"], notetype_dict['Basic'], None, None, username), '\n\n')
 
-    #notetypes = get_notetypes(username)
-    #notetype_dict = {}
-    #if notetypes:
-    #    print("Notetypes retrieved successfully:")
-    #    for notetype in notetypes:
-    #        print(f"ID: {notetype['id']}, Name: {notetype['name']}")
-    #        notetype_dict[notetype['name']] = notetype['id']
-    #else:
-    #    print("Failed to retrieve notetypes.")
+    notetypes = get_notetypes(username)
+    notetype_dict = {}
+    if notetypes:
+        print("Notetypes retrieved successfully:")
+        for notetype in notetypes:
+            print(f"ID: {notetype['id']}, Name: {notetype['name']}")
+            notetype_dict[notetype['name']] = notetype['id']
+    else:
+        print("Failed to retrieve notetypes.")
 
-    #for notetype in notetype_dict:
-    #    if 'New Notetype' in notetype:
-    #        result = delete_notetype(notetype_dict[notetype], username)
+    for notetype in notetype_dict:
+        if 'New Notetype' in notetype:
+            result = delete_notetype(notetype_dict[notetype], username)
 
-    #notetypes = get_notetypes(username)
-    #notetype_dict = {}
-    #if notetypes:
-    #    print("Notetypes retrieved successfully:")
-    #    for notetype in notetypes:
-    #        print(f"ID: {notetype['id']}, Name: {notetype['name']}")
-    #        notetype_dict[notetype['name']] = notetype['id']
-    #else:
-    #    print("Failed to retrieve notetypes.")
+    notetypes = get_notetypes(username)
+    notetype_dict = {}
+    if notetypes:
+        print("Notetypes retrieved successfully:")
+        for notetype in notetypes:
+            print(f"ID: {notetype['id']}, Name: {notetype['name']}")
+            notetype_dict[notetype['name']] = notetype['id']
+    else:
+        print("Failed to retrieve notetypes.")
 
-    #for notetype in notetype_dict:
-    #    if 'New Notetype' in notetype:
-    #        result = delete_notetype(notetype_dict[notetype], username)
+    for notetype in notetype_dict:
+        if 'New Notetype' in notetype:
+            result = delete_notetype(notetype_dict[notetype], username)
 
     delete_user(username)
+
 
