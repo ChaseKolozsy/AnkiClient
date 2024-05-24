@@ -47,3 +47,14 @@ if __name__ == "__main__":
             notetype_dict[notetype['name']] = notetype['id']
     else:
         print("Failed to retrieve notetypes.")
+
+
+    ## ----------------------------------- Test DB ------------------------------------- ##
+
+
+
+
+
+
+    delete_user(username)
+
