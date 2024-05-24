@@ -58,7 +58,7 @@ Each module has test code in the `if __name__ == "__main__":` block, but these w
 - Media should be kept inside of the `data/media` directory. 
 - Anki packages should be kept inside of the `data/apkgs` directory.
 - Csv files should be kept inside of the `data/csv_files` directory.
-- Exported files from Anki should be kept inside of the `data/exports` directory under a subdirectory named after the `username`.
+- Exported files from Anki should be kept inside of the `data/exports` directory under a subdirectory named after the `username` or user profile that the file was exported from.
 
 ## Contributing
 
