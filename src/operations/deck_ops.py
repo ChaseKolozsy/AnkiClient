@@ -70,8 +70,8 @@ def rename_deck(deck_id, new_name):
     response = requests.put(f"{BASE_URL}/rename/{deck_id}/{new_name}")
     return response.json()
 
-def get_decks():
-    response = requests.get(f"{BASE_URL}")
+def get_decks(username):
+    response = requests.get(f"{BASE_URL}", json={"username": username})
     return response.json()
 
 def get_deck(deck_id):
