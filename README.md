@@ -33,7 +33,7 @@ src/
 To install the necessary dependencies, run:
 
 ```sh
-pip install requests 
+pip install requests python-dotenv 
 ```
 
 ## Operations

@@ -1,60 +1,52 @@
 import requests
+from dotenv import dotenv_values
+from pathlib import Path
 
 
-##TODO:
-# - Add more tests
-# - Add more operations
+BASE_URL = "http://localhost:5001/api/db"
+
+
+def sync_db(username, hkey, endpoint):
+    response = requests.post(f"{BASE_URL}/sync", json={'username': username, 'hkey': hkey, 'endpoint': endpoint})
+    print(response)
+    try:
+        return response.json()
+    except:
+        return response.text
 
 
 if __name__ == "__main__":
     from note_ops import get_notetypes
-    from user_ops import create_user, delete_user
-    from deck_ops import create_deck
-    from import_ops import upload_anki_package, upload_csv_file
+    from user_ops import create_user, delete_user, sync_user_login
+    from deck_ops import create_deck, get_decks
+    from import_ops import upload_anki_package
     from pathlib import Path
 
     ## ----------------------------------- Initialize ------------------------------------- ##
-    username = "User 1"  # Replace with the actual username
-    print(create_user(username))
-    deck_id = create_deck(deck_name="testdeck", username=username)['id']
-    print(deck_id)
-    create_deck(deck_name="Hungarian", username=username)
+    env_vars = dotenv_values()
+    profile_name = "User 1"
 
-    file_name = '0_Video_Segments.apkg'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
-    upload_anki_package(username, file_path)
+    # Test creating a user
+    print(create_user(profile_name))
 
-    notetype = 'Basic' 
-    deck_name = 'Hungarian'
-    delimiter = 'TAB'
+    username = env_vars['ANKI_USERNAME']
+    password = env_vars['ANKI_PASSWORD']
+    endpoint = env_vars['ANKI_ENDPOINT']
 
-    file_name = 'Food-recite.txt'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+    response = sync_user_login(profile_name, username, password, endpoint)
+    print(response)
+    hkey = response['hkey']
 
-    file_name = 'Directions-recite.txt'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
-
-
-
-    notetypes = get_notetypes(username)
-    notetype_dict = {}
-    if notetypes:
-        print("Notetypes retrieved successfully:")
-        for notetype in notetypes:
-            print(f"ID: {notetype['id']}, Name: {notetype['name']}")
-            notetype_dict[notetype['name']] = notetype['id']
-    else:
-        print("Failed to retrieve notetypes.")
-
+    print(get_decks(profile_name))
+    
+    anki_package_path = Path.home() / "Documents/FromX2Ank/AnkiClient/data/apkgs/Test.apkg"
+    response = upload_anki_package(profile_name, anki_package_path)
+    print(response)
 
     ## ----------------------------------- Test DB ------------------------------------- ##
+    print(sync_db(profile_name, hkey, endpoint))
 
-
-
-
-
-
-    delete_user(username)
+    input = input(f"ready to delete user '{profile_name}'? y/n: ") 
+    if input == 'y':
+        print(delete_user(profile_name))
 
