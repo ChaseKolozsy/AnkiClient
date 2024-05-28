@@ -12,7 +12,6 @@ def study(*, deck_id: int, action: str, username: str, base_url: str = BASE_URL)
 
     # Process media files if present
     if 'media_files' in response_data:
-        print(f'response_data["media_files"] = {response_data["media_files"]}')
         for filename, filedata in response_data['media_files'].items():
             with open(f"{media_path}/{filename}", "wb") as media_file:
                 media_file.write(base64.b64decode(filedata))
