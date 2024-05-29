@@ -74,7 +74,7 @@ if __name__ == "__main__":
     from deck_ops import create_deck
     from pathlib import Path
 
-    username = "testuser"
+    username = "User 1"
     print(create_user(username))
 
     home = Path.home()
@@ -110,9 +110,9 @@ if __name__ == "__main__":
     file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
     upload_anki_package(username, file_path)
 
-    deck_id = create_deck("Hungarian")['id']
-    notetype = 'Basic' 
     deck_name = 'Hungarian'
+    deck_id = create_deck(deck_name, username)['id']
+    notetype = 'Basic' 
     delimiter = 'TAB'
     print(deck_id)
 

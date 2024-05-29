@@ -2,10 +2,9 @@ import requests
 
 BASE_URL = 'http://localhost:5001/api'
 
-def get_exported_collection_package(username, out_path, export_path, include_media=False, legacy=False):
+def get_exported_collection_package(username, export_path, include_media=False, legacy=False):
     url = f"{BASE_URL}/export-collection-package"
     payload = {
-        'out_path': out_path,
         'include_media': include_media,
         'legacy': legacy
     }
@@ -73,7 +72,6 @@ if __name__ == '__main__':
     file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
     upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
-    out_path_collection = f"/home/anki/.local/share/Anki2/{username}/collection.apkg"
     out_path_package = f"/home/anki/.local/share/Anki2/{username}/test.apkg"
 
     export_package_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/exports/{username}/test.apkg'
@@ -82,7 +80,7 @@ if __name__ == '__main__':
     export_path.parent.mkdir(parents=True, exist_ok=True)
 
 
-    result = get_exported_collection_package(username, out_path_collection, export_path, include_media=True, legacy=True)
+    result = get_exported_collection_package(username, export_path, include_media=True, legacy=True)
     print(result)
 
     print(get_exported_anki_package(username, out_path_package, 1, export_package_path))

@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     print(get_decks(profile_name))
     
-    anki_package_path = Path.home() / "Documents/FromX2Ank/AnkiClient/data/apkgs/Test.apkg"
+    anki_package_path = Path.home() / "Documents/FromX2Ank/AnkiClient/data/apkgs/0_Video_Segments.apkg"
     response = upload_anki_package(profile_name, anki_package_path)
     print(response)
 

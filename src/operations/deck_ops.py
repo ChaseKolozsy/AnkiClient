@@ -141,158 +141,161 @@ def get_deck_config(deck_id, username):
     return response.json()
 
 
+#if __name__ == "__main__":
+#    from note_ops import get_notetypes
+#    from user_ops import create_user, delete_user
+#    from deck_ops import create_deck
+#    from import_ops import upload_anki_package, upload_csv_file
+#    from pathlib import Path
+#
+#    ## ----------------------------------- Initialize ------------------------------------- ##
+#    username = "test_user"  # Replace with the actual username
+#    print(create_user(username))
+#    deck_id = create_deck(deck_name="testdeck", username=username)['id']
+#    print(deck_id)
+#
+#    file_name = '0_Video_Segments.apkg'
+#    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
+#    upload_anki_package(username, file_path)
+#
+#    notetype = 'Basic' 
+#    deck_name = 'testdeck'
+#    delimiter = 'TAB'
+#
+#    file_name = 'Food-recite.txt'
+#    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+#    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+#
+#    file_name = 'Directions-recite.txt'
+#    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+#    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+#
+#    # Assuming get_notetypes is defined elsewhere and returns a list of notetypes
+#    notetypes = get_notetypes(username)
+#    notetype_dict = {}
+#    if notetypes:
+#        print("Notetypes retrieved successfully:")
+#        for notetype in notetypes:
+#            print(f"ID: {notetype['id']}, Name: {notetype['name']}")
+#            notetype_dict[notetype['name']] = notetype['id']
+#
+#    # Assuming the 'Basic' notetype ID is 1 (as per your instruction)
+#    basic_notetype_id = notetype_dict['Basic']
+#
+#
+#    ## ----------------------------------- Test Decks ------------------------------------- ##
+#
+#    # Create a deck
+#    create_deck_response = create_deck("New Deck", username)
+#    print(create_deck_response)
+#    old_deck_id = deck_id
+#    deck_id = create_deck_response['id']
+#    print(f"deck_id: {deck_id}")
+#
+#    # Change deck notetype
+#    change_deck_notetype_response = change_deck_notetype(deck_id, basic_notetype_id, username)
+#    print(change_deck_notetype_response)
+#
+#    # Set new card limit
+#    set_new_card_limit_response = set_new_card_limit(deck_id, 50, username)
+#    print(set_new_card_limit_response)
+#
+#    # Set current deck
+#    set_current_deck_response = set_current_deck(deck_id, username)
+#    print(set_current_deck_response)
+#
+#    # Create a configuration
+#    get_deck_config_response = get_deck_config(deck_id, username)
+#    print('\n\n-------\n\n', get_deck_config_response, '\n\n------\n\n')
+#    deck_config = get_deck_config_response['config']
+#    deck_config_enums = get_deck_config_enums()
+#    for key, value in deck_config_enums.items():
+#        print("\n", key, ":\n")
+#        for enum_key, enum_value in value.items():
+#            print(f"{enum_key}: {enum_value}")
+#
+#    # Accessing the enums from the dictionary
+#    new_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_AFTER_REVIEWS']
+#    interday_learning_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_MIX_WITH_REVIEWS']
+#    review_order = deck_config_enums['ReviewCardOrder']['REVIEW_CARD_ORDER_RANDOM']
+#
+#    print(f"new_mix: {new_mix}, interday_learning_mix: {interday_learning_mix}, review_order: {review_order}")
+#
+#    create_config_response = create_config(
+#        name="Custom Config",
+#        new_cards_per_day=20,
+#        review_cards_per_day=100,
+#        new_mix=new_mix,
+#        interday_learning_mix=interday_learning_mix,
+#        review_order=review_order,
+#        username=username
+#    )
+#    print(create_config_response)
+#
+#    # Apply a configuration (assuming config_id is 2)
+#    apply_config_response = apply_config(deck_id, 2, username)
+#    print(apply_config_response)
+#
+#    # Update deck mix
+#    update_deck_mix_response = update_deck_mix(
+#        deck_id,
+#        new_mix=new_mix,
+#        interday_learning_mix=interday_learning_mix,
+#        review_order=review_order,
+#        username=username
+#    )
+#    print(update_deck_mix_response)
+#
+#    # Rename a deck
+#    print('\n\n------ Rename a deck -------------\n\n')
+#    rename_deck_response = rename_deck(deck_id, "Renamed Deck", username)
+#    print(rename_deck_response)
+#    print('\n\n-------------------\n\n')
+#
+#    # Get all decks
+#    print('\n\n------ Get all decks -------------\n\n')
+#    get_decks_response = get_decks(username)
+#    print(get_decks_response)
+#
+#    print('\n\n------ Get deck by id -------------\n\n')
+#
+#    # Get a specific deck
+#    get_deck_response = get_deck(deck_id, username)
+#    print(get_deck_response)
+#
+#    print('\n\n------ Get cards in a deck -------------\n\n')
+#
+#    # Get cards in a deck
+#    get_cards_in_deck_response = get_cards_in_deck(old_deck_id, username)
+#    print(get_cards_in_deck_response)
+#
+#    print('\n\n------ Get current deck id -------------\n\n')
+#
+#    # Get current deck ID
+#    get_current_deck_id_response = get_current_deck_id(username)
+#    print(get_current_deck_id_response)
+#
+#    print('\n\n------ Get current deck -------------\n\n')
+#
+#    # Get current deck
+#    get_current_deck_response = get_current_deck(username)
+#    print(get_current_deck_response)
+#
+#    print('\n\n------ Get active decks -------------\n\n')
+#
+#    # Get active decks
+#    get_active_decks_response = get_active_decks(username)
+#    print(get_active_decks_response)
+#
+#    print('\n\n------ Delete a deck -------------\n\n')
+#
+#    # Delete a deck
+#    delete_deck_response = delete_deck(deck_id, username)
+#    print(delete_deck_response)
+#
+#
+#    delete_user(username)
+
 if __name__ == "__main__":
-    from note_ops import get_notetypes
-    from user_ops import create_user, delete_user
-    from deck_ops import create_deck
-    from import_ops import upload_anki_package, upload_csv_file
-    from pathlib import Path
-
-    ## ----------------------------------- Initialize ------------------------------------- ##
-    username = "test_user"  # Replace with the actual username
-    print(create_user(username))
-    deck_id = create_deck(deck_name="testdeck", username=username)['id']
-    print(deck_id)
-
-    file_name = '0_Video_Segments.apkg'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
-    upload_anki_package(username, file_path)
-
-    notetype = 'Basic' 
-    deck_name = 'testdeck'
-    delimiter = 'TAB'
-
-    file_name = 'Food-recite.txt'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
-
-    file_name = 'Directions-recite.txt'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    upload_csv_file(username, file_path, deck_name, notetype, delimiter)
-
-    # Assuming get_notetypes is defined elsewhere and returns a list of notetypes
-    notetypes = get_notetypes(username)
-    notetype_dict = {}
-    if notetypes:
-        print("Notetypes retrieved successfully:")
-        for notetype in notetypes:
-            print(f"ID: {notetype['id']}, Name: {notetype['name']}")
-            notetype_dict[notetype['name']] = notetype['id']
-
-    # Assuming the 'Basic' notetype ID is 1 (as per your instruction)
-    basic_notetype_id = notetype_dict['Basic']
-
-
-    ## ----------------------------------- Test Decks ------------------------------------- ##
-
-    # Create a deck
-    create_deck_response = create_deck("New Deck", username)
-    print(create_deck_response)
-    old_deck_id = deck_id
-    deck_id = create_deck_response['id']
-    print(f"deck_id: {deck_id}")
-
-    # Change deck notetype
-    change_deck_notetype_response = change_deck_notetype(deck_id, basic_notetype_id, username)
-    print(change_deck_notetype_response)
-
-    # Set new card limit
-    set_new_card_limit_response = set_new_card_limit(deck_id, 50, username)
-    print(set_new_card_limit_response)
-
-    # Set current deck
-    set_current_deck_response = set_current_deck(deck_id, username)
-    print(set_current_deck_response)
-
-    # Create a configuration
-    get_deck_config_response = get_deck_config(deck_id, username)
-    print('\n\n-------\n\n', get_deck_config_response, '\n\n------\n\n')
-    deck_config = get_deck_config_response['config']
-    deck_config_enums = get_deck_config_enums()
-    for key, value in deck_config_enums.items():
-        print("\n", key, ":\n")
-        for enum_key, enum_value in value.items():
-            print(f"{enum_key}: {enum_value}")
-
-    # Accessing the enums from the dictionary
-    new_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_AFTER_REVIEWS']
-    interday_learning_mix = deck_config_enums['ReviewMix']['REVIEW_MIX_MIX_WITH_REVIEWS']
-    review_order = deck_config_enums['ReviewCardOrder']['REVIEW_CARD_ORDER_RANDOM']
-
-    print(f"new_mix: {new_mix}, interday_learning_mix: {interday_learning_mix}, review_order: {review_order}")
-
-    create_config_response = create_config(
-        name="Custom Config",
-        new_cards_per_day=20,
-        review_cards_per_day=100,
-        new_mix=new_mix,
-        interday_learning_mix=interday_learning_mix,
-        review_order=review_order,
-        username=username
-    )
-    print(create_config_response)
-
-    # Apply a configuration (assuming config_id is 2)
-    apply_config_response = apply_config(deck_id, 2, username)
-    print(apply_config_response)
-
-    # Update deck mix
-    update_deck_mix_response = update_deck_mix(
-        deck_id,
-        new_mix=new_mix,
-        interday_learning_mix=interday_learning_mix,
-        review_order=review_order,
-        username=username
-    )
-    print(update_deck_mix_response)
-
-    # Rename a deck
-    print('\n\n------ Rename a deck -------------\n\n')
-    rename_deck_response = rename_deck(deck_id, "Renamed Deck", username)
-    print(rename_deck_response)
-    print('\n\n-------------------\n\n')
-
-    # Get all decks
-    print('\n\n------ Get all decks -------------\n\n')
-    get_decks_response = get_decks(username)
-    print(get_decks_response)
-
-    print('\n\n------ Get deck by id -------------\n\n')
-
-    # Get a specific deck
-    get_deck_response = get_deck(deck_id, username)
-    print(get_deck_response)
-
-    print('\n\n------ Get cards in a deck -------------\n\n')
-
-    # Get cards in a deck
-    get_cards_in_deck_response = get_cards_in_deck(old_deck_id, username)
-    print(get_cards_in_deck_response)
-
-    print('\n\n------ Get current deck id -------------\n\n')
-
-    # Get current deck ID
-    get_current_deck_id_response = get_current_deck_id(username)
-    print(get_current_deck_id_response)
-
-    print('\n\n------ Get current deck -------------\n\n')
-
-    # Get current deck
-    get_current_deck_response = get_current_deck(username)
-    print(get_current_deck_response)
-
-    print('\n\n------ Get active decks -------------\n\n')
-
-    # Get active decks
-    get_active_decks_response = get_active_decks(username)
-    print(get_active_decks_response)
-
-    print('\n\n------ Delete a deck -------------\n\n')
-
-    # Delete a deck
-    delete_deck_response = delete_deck(deck_id, username)
-    print(delete_deck_response)
-
-
-    delete_user(username)
+    print(get_decks("User 1"))
 
