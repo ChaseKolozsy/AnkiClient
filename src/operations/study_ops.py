@@ -10,6 +10,9 @@ def study(*, deck_id: int, action: str, username: str, base_url: str = BASE_URL)
     response = requests.post(url, json={"action": action, "deck_id": deck_id, "username": username})
     response_data = response.json()
 
+    if 'ease_options' in response_data:
+        for ease_option, ease_value in response_data['ease_options'].items():
+            print(f"Ease Option: {ease_option}, Ease Value: {ease_value}")
     # Process media files if present
     if 'media_files' in response_data:
         for filename, filedata in response_data['media_files'].items():
