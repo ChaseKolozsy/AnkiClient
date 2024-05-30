@@ -16,9 +16,9 @@ def delete_user(username):
         return {"error": "Invalid JSON response", "status_code": response.status_code}
 
 
-def sync_user_login(profile_name, username, password, endpoint=None):
+def sync_user_login(*, profile_name: str, username: str, password: str, upload: bool = False, endpoint: str = None):
     url = f"{BASE_URL}/sync-login"
-    data = {"profile_name": profile_name, "username": username, "password": password, "endpoint": endpoint}
+    data = {"profile_name": profile_name, "username": username, "password": password, "endpoint": endpoint, "upload": upload}
     
     try:
         response = requests.post(url, json=data)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     username = env_vars['ANKI_USERNAME']
     password = env_vars['ANKI_PASSWORD']
     endpoint = env_vars['ANKI_ENDPOINT']
-    print(sync_user_login(profile_name, username, password, endpoint))
+    print(sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint))
 
     print(get_decks(profile_name))
 
