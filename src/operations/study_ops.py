@@ -64,66 +64,81 @@ if __name__ == "__main__":
     import user_ops
     import deck_ops
     import import_ops
+    import db_ops
+    import time
+    from dotenv import dotenv_values
 
-    home = Path.home()
+    env_vars = dotenv_values()
+    profile_name = "User 1"
+    # Test creating a user
+    print(user_ops.create_user(profile_name))
 
-    username = "testuser"
-    response = user_ops.create_user(username)
-    print(response)
-    deck_id = deck_ops.create_deck(deck_name="testdeck", username=username)['id']
-    print(deck_id)
+    username = env_vars['ANKI_USERNAME']
+    password = env_vars['ANKI_PASSWORD']
+    endpoint = env_vars['ANKI_ENDPOINT']
+    result = user_ops.sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=False, sync_media=True)
+    print(result)
+    hkey = result['hkey']
 
-    file_name = '0_Video_Segments.apkg'
-    file_path = home / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
-    import_ops.upload_anki_package(username, file_path)
+   # home = Path.home()
 
-    file_name = 'test.apkg'
-    file_path = home / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
-    import_ops.upload_anki_package(username, file_path)
+   # username = "testuser"
+   # response = user_ops.create_user(username)
+   # print(response)
+   # deck_id = deck_ops.create_deck(deck_name="testdeck", username=username)['id']
+   # print(deck_id)
 
-    notetype = 'Basic' 
-    deck_name = 'testdeck'
-    delimiter = 'TAB'
+   # file_name = '0_Video_Segments.apkg'
+   # file_path = home / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
+   # import_ops.upload_anki_package(username, file_path)
 
-    file_name = 'food.zip'
-    zip_file_path = home / f'Documents/FromX2Ank/AnkiClient/data/media/{file_name}'
-    zip_file_result = import_ops.post_zip_file_to_unzip_media(zip_file_path, username)
-    print(zip_file_result)
+   # file_name = 'test.apkg'
+   # file_path = home / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
+   # import_ops.upload_anki_package(username, file_path)
 
-    file_name = 'Food-recite.txt'
-    file_path = home / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    import_ops.upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+   # notetype = 'Basic' 
+   # deck_name = 'testdeck'
+   # delimiter = 'TAB'
 
-    file_name = 'directions.zip'
-    zip_file_path = home / f'Documents/FromX2Ank/AnkiClient/data/media/{file_name}'
-    zip_file_result = import_ops.post_zip_file_to_unzip_media(zip_file_path, username)
-    print(zip_file_result)
+   # file_name = 'food.zip'
+   # zip_file_path = home / f'Documents/FromX2Ank/AnkiClient/data/media/{file_name}'
+   # zip_file_result = import_ops.post_zip_file_to_unzip_media(zip_file_path, username)
+   # print(zip_file_result)
 
-    file_name = 'Directions-recite.txt'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
-    import_ops.upload_csv_file(username, file_path, deck_name, notetype, delimiter)
+   # file_name = 'Food-recite.txt'
+   # file_path = home / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+   # import_ops.upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
-    review_session(deck_id, username)
+   # file_name = 'directions.zip'
+   # zip_file_path = home / f'Documents/FromX2Ank/AnkiClient/data/media/{file_name}'
+   # zip_file_result = import_ops.post_zip_file_to_unzip_media(zip_file_path, username)
+   # print(zip_file_result)
 
-    custom_study_params = {
-        "new_limit_delta": 20,
-        "cram": {
-            "kind": "CRAM_KIND_NEW",
-            "card_limit": 20,
-            "tags_to_include": ["Food"],
-            "tags_to_exclude": []
-        }
-    }
+   # file_name = 'Directions-recite.txt'
+   # file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/csv_files/{file_name}'
+   # import_ops.upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
-    try:
-        response, status_code = create_custom_study_session(username=username, deck_id=deck_id, custom_study_params=custom_study_params)
-    except Exception as e:
-        user_ops.delete_user(username)
-        raise e
-    print(f"Status Code: {status_code}")
-    print(f"Response: {response}")
+   # review_session(deck_id, username)
 
-    response = deck_ops.get_decks(username)
+   # custom_study_params = {
+   #     "new_limit_delta": 20,
+   #     "cram": {
+   #         "kind": "CRAM_KIND_NEW",
+   #         "card_limit": 20,
+   #         "tags_to_include": ["Food"],
+   #         "tags_to_exclude": []
+   #     }
+   # }
+
+   # try:
+   #     response, status_code = create_custom_study_session(username=username, deck_id=deck_id, custom_study_params=custom_study_params)
+   # except Exception as e:
+   #     user_ops.delete_user(username)
+   #     raise e
+   # print(f"Status Code: {status_code}")
+   # print(f"Response: {response}")
+
+    response = deck_ops.get_decks(profile_name)
     print(response)
     deck_dict = {}
     for deck in response:
@@ -131,11 +146,11 @@ if __name__ == "__main__":
 
     print(deck_dict)
 
-    review_session(deck_dict['Custom Study Session'], username)
+    #review_session(deck_dict['Custom Study Session'], username)
 
 
-    review_session(deck_dict['0: Video Segments'], username)
-    review_session(deck_dict['Test'], username)
+    review_session(deck_dict['0: Video Segments'], profile_name)
+    #review_session(deck_dict['Test'], username)
 
     input = input("ready to delete user? y/n: ") 
     if input == 'y':

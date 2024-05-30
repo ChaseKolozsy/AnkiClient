@@ -6,13 +6,23 @@ from pathlib import Path
 BASE_URL = "http://localhost:5001/api/db"
 
 
-def sync_db(username, hkey, endpoint):
-    response = requests.post(f"{BASE_URL}/sync", json={'username': username, 'hkey': hkey, 'endpoint': endpoint})
+def sync_db(username, hkey, endpoint, sync_media=False):
+    response = requests.post(f"{BASE_URL}/sync", json={'username': username, 'hkey': hkey, 'endpoint': endpoint, 'sync_media': sync_media})
     print(response)
     try:
         return response.json()
     except:
         return response.text
+
+
+def sync_status(username, hkey, endpoint):
+    response = requests.post(f"{BASE_URL}/sync_status", json={'username': username, 'hkey': hkey, 'endpoint': endpoint})
+    return response.json()
+
+def media_sync_status(username):
+    response = requests.post(f"{BASE_URL}/media_sync_status", json={'username': username})
+    return response.json()
+
 
 
 if __name__ == "__main__":
