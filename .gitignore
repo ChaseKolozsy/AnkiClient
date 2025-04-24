@@ -12,3 +12,6 @@ env/
 .env
 
 data/
+
+out*
+test_custom_fields_deck.py
