@@ -66,10 +66,7 @@ def upload_media_file(username, media_file_path):
     response = requests.post(url, files=files)
     return response.json()
 
-
-
-
-if __name__ == "__main__":
+def test_import_ops():
     from user_ops import delete_user, create_user
     from deck_ops import create_deck
     from pathlib import Path
@@ -125,3 +122,10 @@ if __name__ == "__main__":
     upload_csv_file(username, file_path, deck_name, notetype, delimiter)
 
     print(delete_user(username))
+
+if __name__ == "__main__":
+    from pathlib import Path
+    username = "User 1"
+    file_name = 'Hungarian_grammar_points.apkg'
+    file_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/{file_name}'
+    print(upload_anki_package(username, file_path))

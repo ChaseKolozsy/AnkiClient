@@ -48,7 +48,7 @@ def get_exported_notes_csv(*,
     else:
         return response.json()
 
-if __name__ == '__main__':
+def test_export_ops():
     from user_ops import create_user, delete_user
     from import_ops import upload_anki_package, upload_csv_file
     from pathlib import Path
@@ -93,3 +93,10 @@ if __name__ == '__main__':
     if ready == 'y':
         delete_user(username)
 
+if __name__ == '__main__':
+    from pathlib import Path
+    username = "User 1"
+    deck_id = "1745506364393"
+    out_path_package = f"/home/anki/.local/share/Anki2/{username}/Hungarian_grammar_points.apkg"
+    export_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/Hungarian_grammar_points.apkg'
+    print(get_exported_anki_package(username, out_path_package, deck_id, export_path))
