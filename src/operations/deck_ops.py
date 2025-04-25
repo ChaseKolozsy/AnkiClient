@@ -298,7 +298,5 @@ def get_deck_config(deck_id, username):
 
 if __name__ == "__main__":
     username = "User 1"
-    #print(get_decks(username))
-    deck_id = "1745506364393"
-    print(len(get_cards_in_deck(deck_id, username)))
+    print(get_decks(username))
 

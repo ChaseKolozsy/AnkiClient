@@ -89,7 +89,8 @@ def delete_notetype(notetype_id, username):
     return response.json()
 
 # Example usage
-if __name__ == "__main__":
+
+def test_note_ops():
     from user_ops import create_user, delete_user
     from deck_ops import create_deck
     from import_ops import upload_anki_package, upload_csv_file
@@ -214,4 +215,7 @@ if __name__ == "__main__":
 
     delete_user(username)
 
-
+if __name__ == "__main__":
+    note_types = get_notetypes(username="User 1")
+    print(note_types)
+    #print(delete_notetype(notetype_id="1745506364405", username="User 1"))
