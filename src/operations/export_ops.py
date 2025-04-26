@@ -96,7 +96,7 @@ def test_export_ops():
 if __name__ == '__main__':
     from pathlib import Path
     username = "User 1"
-    deck_id = "1745659654559"
-    out_path_package = f"/home/anki/.local/share/Anki2/{username}/Hungarian_grammar_point_sections.apkg"
-    export_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/Hungarian_grammar_point_sections.apkg'
+    deck_id = "1745664813895"
+    out_path_package = f"/home/anki/.local/share/Anki2/{username}/Hungarian_grammar_points.apkg"
+    export_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/Hungarian_grammar_points.apkg'
     print(get_exported_anki_package(username, out_path_package, deck_id, export_path))
