@@ -298,5 +298,9 @@ def get_deck_config(deck_id, username):
 
 if __name__ == "__main__":
     username = "User 1"
-    print(get_decks(username))
+    decks = get_decks(username)
+    for deck in decks:
+        id = deck['id']
+        if id != 1:
+            print(delete_deck(id, username))
 
