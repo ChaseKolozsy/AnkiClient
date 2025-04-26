@@ -6,8 +6,14 @@ from pathlib import Path
 BASE_URL = "http://localhost:5001/api/db"
 
 
-def sync_db(username, hkey, endpoint, sync_media=False):
-    response = requests.post(f"{BASE_URL}/sync", json={'username': username, 'hkey': hkey, 'endpoint': endpoint, 'sync_media': sync_media})
+def sync_db(username, hkey, endpoint, sync_media=False, upload=False):
+    response = requests.post(f"{BASE_URL}/sync", json={
+        'username': username, 
+        'hkey': hkey, 
+        'endpoint': endpoint, 
+        'sync_media': sync_media,
+        'upload': upload
+    })
     print(response)
     try:
         return response.json()
@@ -25,7 +31,7 @@ def media_sync_status(username):
 
 
 
-if __name__ == "__main__":
+def test_db_ops():
     from note_ops import get_notetypes
     from user_ops import create_user, delete_user, sync_user_login
     from deck_ops import create_deck, get_decks
@@ -76,10 +82,9 @@ if __name__ == "__main__":
         #print(response)
     except Exception as e:
         print(f"Error: {e}")
-
     ## ----------------------------------- Test DB ------------------------------------- ##
     try:
-        print(sync_db(profile_name, hkey, endpoint))
+        print(sync_db(profile_name, hkey, endpoint, upload=upload))
     except Exception as e:
         print(f"Error: {e}")
 
@@ -87,3 +92,18 @@ if __name__ == "__main__":
     if input == 'y':
         print(delete_user(profile_name))
 
+
+if __name__ == "__main__":
+    import os
+    env_vars = dotenv_values()
+    username = env_vars['ANKI_USERNAME']
+    password = env_vars['ANKI_PASSWORD']
+    endpoint = env_vars['ANKI_ENDPOINT']
+    upload = True
+    from user_ops import sync_user_login
+    profile_name = 'chase'
+    response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
+    print(response)
+    hkey = response['hkey']
+    endpoint = response.get('endpoint', endpoint)  # Use the endpoint from the response if available
+    print(sync_db(profile_name, hkey, endpoint, upload=upload))

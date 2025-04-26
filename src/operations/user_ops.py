@@ -44,10 +44,10 @@ if __name__ == "__main__":
     password = env_vars['ANKI_PASSWORD']
     endpoint = env_vars['ANKI_ENDPOINT']
 
-    home = Path.home()
-    file_name = '0_Video_Segments.apkg'
-    file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
-    upload_anki_package(profile_name, file_path)
+    #home = Path.home()
+    #file_name = '0_Video_Segments.apkg'
+    #file_path = Path.home() / f'Documents/FromX2Ank/AnkiClient/data/apkgs/{file_name}'
+    #upload_anki_package(profile_name, file_path)
 
     result = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=True, sync_media=True)
     print(result)
