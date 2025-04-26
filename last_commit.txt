@@ -1,0 +1,84 @@
+commit d55ec82e69cfecbcd35e5f547954032859310d38
+Author: Chase Kolozsy <chasekolozsy@gmail.com>
+Date:   Sat Apr 26 17:23:05 2025 +0200
+
+    misc
+
+diff --git a/src/operations/import_ops.py b/src/operations/import_ops.py
+index 7adc133..926de16 100644
+--- a/src/operations/import_ops.py
++++ b/src/operations/import_ops.py
+@@ -109,7 +109,7 @@ def test_import_ops():
+ 
+     deck_name = 'Hungarian'
+     deck_id = create_deck(deck_name, username)['id']
+-    notetype = 'Basic' 
++    notetype = 'Basic'
+     delimiter = 'TAB'
+     print(deck_id)
+ 
+@@ -126,6 +126,6 @@ def test_import_ops():
+ if __name__ == "__main__":
+     from pathlib import Path
+     username = "User 1"
+-    file_name = 'Hungarian_grammar_points.apkg'
++    file_name = 'HungarianGrammarPoints.apkg'
+     file_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/{file_name}'
+-    print(upload_anki_package(username, file_path))
++    print(upload_anki_package("chase", file_path))
+diff --git a/src/operations/study_ops.py b/src/operations/study_ops.py
+index b17d614..717238b 100644
+--- a/src/operations/study_ops.py
++++ b/src/operations/study_ops.py
+@@ -69,14 +69,14 @@ if __name__ == "__main__":
+     from dotenv import dotenv_values
+ 
+     env_vars = dotenv_values()
+-    profile_name = "User 1"
++    profile_name = "chase"
+     # Test creating a user
+-    print(user_ops.create_user(profile_name))
++    #print(user_ops.create_user(profile_name))
+ 
+     username = env_vars['ANKI_USERNAME']
+     password = env_vars['ANKI_PASSWORD']
+     endpoint = env_vars['ANKI_ENDPOINT']
+-    result = user_ops.sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=False, sync_media=True)
++    result = user_ops.sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=True, sync_media=False)
+     print(result)
+     hkey = result['hkey']
+ 
+@@ -143,22 +143,21 @@ if __name__ == "__main__":
+     deck_dict = {}
+     for deck in response:
+         deck_dict[deck['name']] = deck['id']
++        print(deck_dict)
+ 
+-    print(deck_dict)
++    review_session(deck_dict['HungarianGrammarPoints'], profile_name)
+ 
+-    #review_session(deck_dict['Custom Study Session'], username)
+ 
+-
+-    review_session(deck_dict['0: Video Segments'], profile_name)
++    #review_session(deck_dict['0: Video Segments'], profile_name)
+     #review_session(deck_dict['Test'], username)
+ 
+-    input = input("ready to delete user? y/n: ") 
+-    if input == 'y':
+-        print(user_ops.delete_user(username))
+-        media_files = os.listdir(media_path)
+-        for file in media_files:
+-            file_path = os.path.join(media_path, file)
+-            if os.path.isfile(file_path):
+-                os.remove(file_path)
++    #input = input("ready to delete user? y/n: ") 
++    #if input == 'y':
++    #    print(user_ops.delete_user(username))
++    #    media_files = os.listdir(media_path)
++    #    for file in media_files:
++    #        file_path = os.path.join(media_path, file)
++    #        if os.path.isfile(file_path):
++    #            os.remove(file_path)
+ 
+ 

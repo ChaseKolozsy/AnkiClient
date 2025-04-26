@@ -109,7 +109,7 @@ def test_import_ops():
 
     deck_name = 'Hungarian'
     deck_id = create_deck(deck_name, username)['id']
-    notetype = 'Basic' 
+    notetype = 'Basic'
     delimiter = 'TAB'
     print(deck_id)
 
@@ -126,6 +126,6 @@ def test_import_ops():
 if __name__ == "__main__":
     from pathlib import Path
     username = "User 1"
-    file_name = 'Hungarian_grammar_points.apkg'
+    file_name = 'HungarianGrammarPoints.apkg'
     file_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/{file_name}'
-    print(upload_anki_package(username, file_path))
+    print(upload_anki_package("chase", file_path))

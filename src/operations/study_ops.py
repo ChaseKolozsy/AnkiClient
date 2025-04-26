@@ -69,14 +69,14 @@ if __name__ == "__main__":
     from dotenv import dotenv_values
 
     env_vars = dotenv_values()
-    profile_name = "User 1"
+    profile_name = "chase"
     # Test creating a user
-    print(user_ops.create_user(profile_name))
+    #print(user_ops.create_user(profile_name))
 
     username = env_vars['ANKI_USERNAME']
     password = env_vars['ANKI_PASSWORD']
     endpoint = env_vars['ANKI_ENDPOINT']
-    result = user_ops.sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=False, sync_media=True)
+    result = user_ops.sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=True, sync_media=False)
     print(result)
     hkey = result['hkey']
 
@@ -143,22 +143,21 @@ if __name__ == "__main__":
     deck_dict = {}
     for deck in response:
         deck_dict[deck['name']] = deck['id']
+        print(deck_dict)
 
-    print(deck_dict)
-
-    #review_session(deck_dict['Custom Study Session'], username)
+    review_session(deck_dict['HungarianGrammarPoints'], profile_name)
 
 
-    review_session(deck_dict['0: Video Segments'], profile_name)
+    #review_session(deck_dict['0: Video Segments'], profile_name)
     #review_session(deck_dict['Test'], username)
 
-    input = input("ready to delete user? y/n: ") 
-    if input == 'y':
-        print(user_ops.delete_user(username))
-        media_files = os.listdir(media_path)
-        for file in media_files:
-            file_path = os.path.join(media_path, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
+    #input = input("ready to delete user? y/n: ") 
+    #if input == 'y':
+    #    print(user_ops.delete_user(username))
+    #    media_files = os.listdir(media_path)
+    #    for file in media_files:
+    #        file_path = os.path.join(media_path, file)
+    #        if os.path.isfile(file_path):
+    #            os.remove(file_path)
 
 
