@@ -105,5 +105,6 @@ if __name__ == "__main__":
     response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
     print(response)
     hkey = response['hkey']
-    endpoint = response.get('endpoint', endpoint)  # Use the endpoint from the response if available
+    #hkey = "b5{ltJ)a[JlrJJ$g"
+    endpoint = endpoint
     print(sync_db(profile_name, hkey, endpoint, upload=upload))
