@@ -236,8 +236,27 @@ def get_cards_by_state(*, deck_id: int, state: str, username: str) -> Dict[str, 
     response = requests.get(url, json=data)
     return response.json()
 
+def get_cards_by_state_without_fields(*, deck_id: int, state: str, username: str) -> Dict[str, Any]:
+    url = f"{BASE_URL}/{deck_id}/by-state-without-fields"
+    data = {
+        "state": state,
+        "username": username
+    }
+    response = requests.get(url, json=data)
+    return response.json()
+
 def get_cards_by_tag_and_state(*, tag: str, state: str, username: str) -> Dict[str, Any]:
     url = f"{BASE_URL}/by-tag-and-state"
+    data = {
+        "tag": tag,
+        "state": state,
+        "username": username
+    }
+    response = requests.get(url, json=data)
+    return response.json()
+
+def get_cards_by_tag_and_state_without_fields(*, tag: str, state: str, username: str) -> Dict[str, Any]:
+    url = f"{BASE_URL}/by-tag-and-state-without-fields"
     data = {
         "tag": tag,
         "state": state,
