@@ -291,7 +291,55 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
     response = requests.delete(url, json=data)
     return response.json()
 
+def get_difficult_cards(*, username: str, deck_id: int, min_reviews: int = 3, max_factor: int = 2000, min_ratio: float = 0.2, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
+    url = f'{BASE_URL}/difficult-cards'
+    data = {
+        'username': username,
+        'deck_id': deck_id,
+        'min_reviews': min_reviews,
+        'max_factor': max_factor,
+        'min_ratio': min_ratio,
+        'include_suspended': include_suspended,
+        'include_fields': include_fields
+    }
+    response = requests.get(url, json=data)
+    return response.json()
 
+def get_cards_by_learning_metrics(*, username: str, deck_id: int, min_reviews: Optional[int] = None, max_reviews: Optional[int] = None, min_interval: Optional[int] = None, max_interval: Optional[int] = None, min_factor: Optional[int] = None, max_factor: Optional[int] = None, min_lapses: Optional[int] = None, max_lapses: Optional[int] = None, min_ratio: Optional[float] = None, max_ratio: Optional[float] = None, include_suspended: bool = False, include_new: bool = False, include_fields: bool = True, limit: int = 100) -> Dict[str, Any]:
+    url = f'{BASE_URL}/by-learning-metrics'
+    data = {
+        'username': username,
+        'deck_id': deck_id,
+        'min_reviews': min_reviews,
+        'max_reviews': max_reviews,
+        'min_interval': min_interval,
+        'max_interval': max_interval,
+        'min_factor': min_factor,
+        'max_factor': max_factor,
+        'min_lapses': min_lapses,
+        'max_lapses': max_lapses,
+        'min_ratio': min_ratio,
+        'max_ratio': max_ratio,
+        'include_suspended': include_suspended,
+        'include_new': include_new,
+        'include_fields': include_fields,
+        'limit': limit
+    }
+    response = requests.get(url, json=data)
+    return response.json()
+
+def reset_difficult_cards(*, username: str, deck_id: int, min_reviews: int = 5, max_factor: int = 1800, min_ratio: float = 0.3, min_lapses: int = 3) -> Dict[str, Any]:
+    url = f'{BASE_URL}/reset-difficult'
+    data = {
+        'username': username,
+        'deck_id': deck_id,
+        'min_reviews': min_reviews,
+        'max_factor': max_factor,
+        'min_ratio': min_ratio,
+        'min_lapses': min_lapses
+    }
+    response = requests.post(url, json=data)
+    return response.json()
 
 def test_card_ops():
     from note_ops import get_notetypes
@@ -561,5 +609,33 @@ def test_card_ops():
 if __name__ == "__main__":
     import json
     username = 'chase'
-    response = get_cards_by_tag_and_state_without_fields(tag="Chapter_30", state="new", username=username)
+    deck_id = "1745682159947"
+    #response = get_cards_by_tag_and_state_without_fields(tag="Chapter_30", state="new", username=username)
+    #print(json.dumps(response, indent=4, ensure_ascii=False))
+    print("\n\n---------------- Get cards by learning metrics ---------------------------\n\n")
+    response = get_cards_by_learning_metrics(
+        username=username,
+        deck_id=deck_id,
+        min_reviews=8,
+        max_reviews=8,
+        min_interval=4,
+        max_interval=4,
+        include_suspended=False,
+        include_new=False,
+        include_fields=True,
+        limit=10
+    )
     print(json.dumps(response, indent=4, ensure_ascii=False))
+
+    print("\n\n---------------- get difficult cards ---------------------------\n\n")
+    response = get_difficult_cards(
+        username=username,
+        deck_id=deck_id,
+        min_reviews=8,
+        max_factor=2300,
+        min_ratio=2.0,
+        include_suspended=False,
+        include_fields=True
+    )
+    print(json.dumps(response, indent=4, ensure_ascii=False))
+
