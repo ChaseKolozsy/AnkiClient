@@ -291,12 +291,13 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
     response = requests.delete(url, json=data)
     return response.json()
 
-def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, max_factor: int = 2000, min_ratio: float = 0.2, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
-    url = f'{BASE_URL}/difficult-cards'
+def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, min_factor: int = 2000, max_factor: int = 2750, min_ratio: float = 0.2, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
+    url = f'{BASE_URL}/by-ease'
     data = {
         'username': username,
         'deck_id': deck_id,
         'min_reviews': min_reviews,
+        'min_factor': min_factor,
         'max_factor': max_factor,
         'min_ratio': min_ratio,
         'include_suspended': include_suspended,
