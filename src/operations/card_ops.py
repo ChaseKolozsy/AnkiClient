@@ -291,7 +291,7 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
     response = requests.delete(url, json=data)
     return response.json()
 
-def get_difficult_cards(*, username: str, deck_id: int, min_reviews: int = 3, max_factor: int = 2000, min_ratio: float = 0.2, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
+def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, max_factor: int = 2000, min_ratio: float = 0.2, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
     url = f'{BASE_URL}/difficult-cards'
     data = {
         'username': username,
@@ -616,10 +616,10 @@ if __name__ == "__main__":
     response = get_cards_by_learning_metrics(
         username=username,
         deck_id=deck_id,
-        min_reviews=8,
+        min_reviews=0,
         max_reviews=8,
         min_interval=4,
-        max_interval=4,
+        max_interval=6,
         include_suspended=False,
         include_new=False,
         include_fields=True,
@@ -627,15 +627,15 @@ if __name__ == "__main__":
     )
     print(json.dumps(response, indent=4, ensure_ascii=False))
 
-    print("\n\n---------------- get difficult cards ---------------------------\n\n")
-    response = get_difficult_cards(
-        username=username,
-        deck_id=deck_id,
-        min_reviews=8,
-        max_factor=2300,
-        min_ratio=2.0,
-        include_suspended=False,
-        include_fields=True
-    )
-    print(json.dumps(response, indent=4, ensure_ascii=False))
+    #print("\n\n---------------- get difficult cards ---------------------------\n\n")
+    #response = get_cards_by_ease_(
+    #    username=username,
+    #    deck_id=deck_id,
+    #    min_reviews=8,
+    #    max_factor=2300,
+    #    min_ratio=2.0,
+    #    include_suspended=False,
+    #    include_fields=True
+    #)
+    #print(json.dumps(response, indent=4, ensure_ascii=False))
 
