@@ -292,7 +292,8 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
     return response.json()
 
 
-if __name__ == "__main__":
+
+def test_card_ops():
     from note_ops import get_notetypes
     from user_ops import create_user, delete_user
     from deck_ops import create_deck
@@ -557,3 +558,8 @@ if __name__ == "__main__":
 
     delete_user(username)
 
+if __name__ == "__main__":
+    import json
+    username = 'chase'
+    response = get_cards_by_tag_and_state_without_fields(tag="Chapter_30", state="new", username=username)
+    print(json.dumps(response, indent=4, ensure_ascii=False))
