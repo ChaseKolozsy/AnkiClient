@@ -31,7 +31,53 @@ def create_custom_study_session(*, username: str, deck_id: int, custom_study_par
     response = requests.post(url, json=payload)
     return response.json(), response.status_code
 
-
+def study_custom_session(*, username: str, original_deck_id: int, custom_study_params: dict, base_url: str = BASE_URL) -> None:
+    """
+    Creates a custom study session and then immediately starts studying it.
+    
+    Args:
+        username: The username of the profile
+        original_deck_id: The ID of the original deck
+        custom_study_params: Parameters for creating the custom study session
+        base_url: The base URL for the API
+    
+    Returns:
+        None - this function manages the interactive study session
+    """
+    # First create the custom study session
+    response_data, status_code = create_custom_study_session(
+        username=username, 
+        deck_id=original_deck_id, 
+        custom_study_params=custom_study_params
+    )
+    
+    if status_code != 200:
+        print(f"Error creating custom study session: {response_data}")
+        return
+    
+    # Extract the created deck ID
+    created_deck_id = response_data.get('created_deck_id')
+    
+    if not created_deck_id:
+        print("No deck ID returned for custom study session. Looking up Custom Study Session deck...")
+        
+        # Try to find the Custom Study Session deck
+        import deck_ops
+        decks = deck_ops.get_decks(username)
+        for deck in decks:
+            if deck['name'] == "Custom Study Session":
+                created_deck_id = deck['id']
+                print(f"Found Custom Study Session deck with ID: {created_deck_id}")
+                break
+        
+        if not created_deck_id:
+            print("Could not find Custom Study Session deck. Using original deck ID.")
+            created_deck_id = original_deck_id
+    else:
+        print(f"Custom study session created with deck ID: {created_deck_id}")
+    
+    # Now start a study session with this deck
+    review_session(created_deck_id, username)
 
 def review_session(deck_id: int, username: str):
     choice = ""
@@ -59,7 +105,7 @@ def review_session(deck_id: int, username: str):
 
         choice = input("hit 'q' to quit, else, any key to continue: ")
 
-if __name__ == "__main__":
+def test_study_ops():
     from pathlib import Path
     import user_ops
     import deck_ops
@@ -159,5 +205,43 @@ if __name__ == "__main__":
     #        file_path = os.path.join(media_path, file)
     #        if os.path.isfile(file_path):
     #            os.remove(file_path)
+
+
+
+if __name__ == "__main__":
+    # Setup parameters for custom study
+    custom_study_params = {
+        "new_limit_delta": 0,
+        "cram": {
+            "kind": "CRAM_KIND_DUE",  # Study due cards
+            "card_limit": 1000,        # Limit to 1000 cards max
+            "tags_to_include": [],     # No tag filtering
+            "tags_to_exclude": []      # No tag exclusions
+        }
+    }
+    username = "chase"
+    deck_id = 1745682159947
+    
+    # Option 1: Create custom study session and show results
+    print("Creating custom study session...")
+    custom_study_session, status_code = create_custom_study_session(
+        username=username, 
+        deck_id=deck_id, 
+        custom_study_params=custom_study_params
+    )
+    import json
+    print(f"Status code: {status_code}")
+    print(json.dumps(custom_study_session, indent=4, ensure_ascii=False))
+    
+    # Option 2: Create custom study session and immediately start studying
+    # Uncomment to use
+    print("\nTo study the custom session immediately, uncomment the following lines:")
+    print("""
+    study_custom_session(
+        username=username,
+        original_deck_id=deck_id,
+        custom_study_params=custom_study_params
+    )
+    """)
 
 
