@@ -128,4 +128,4 @@ if __name__ == "__main__":
     username = "User 1"
     file_name = 'HungarianGrammarPoints.apkg'
     file_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/{file_name}'
-    print(upload_anki_package("chase", file_path))
+    print(upload_anki_package("sekeda", file_path))

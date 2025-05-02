@@ -97,11 +97,13 @@ if __name__ == "__main__":
     import os
     env_vars = dotenv_values()
     username = env_vars['ANKI_USERNAME']
+    username = "tracychasek@gmail.com"
     password = env_vars['ANKI_PASSWORD']
     endpoint = env_vars['ANKI_ENDPOINT']
     hkey = env_vars['ANKI_HKEY']
-    profile_name = 'chase'
-    upload = False
+    hkey = 'f_mu!A<xnJb`i>eK'
+    profile_name = 'sekeda'
+    upload = True
     #from user_ops import sync_user_login
     #response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
     #print(response)
