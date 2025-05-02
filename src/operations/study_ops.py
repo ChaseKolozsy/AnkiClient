@@ -10,9 +10,6 @@ def study(*, deck_id: int, action: str, username: str, base_url: str = BASE_URL)
     response = requests.post(url, json={"action": action, "deck_id": deck_id, "username": username})
     response_data = response.json()
 
-    if 'ease_options' in response_data:
-        for ease_option, ease_value in response_data['ease_options'].items():
-            print(f"Ease Option: {ease_option}, Ease Value: {ease_value}")
     # Process media files if present
     if 'media_files' in response_data:
         for filename, filedata in response_data['media_files'].items():
@@ -232,16 +229,6 @@ if __name__ == "__main__":
     import json
     print(f"Status code: {status_code}")
     print(json.dumps(custom_study_session, indent=4, ensure_ascii=False))
-    
-    # Option 2: Create custom study session and immediately start studying
-    # Uncomment to use
-    print("\nTo study the custom session immediately, uncomment the following lines:")
-    print("""
-    study_custom_session(
-        username=username,
-        original_deck_id=deck_id,
-        custom_study_params=custom_study_params
-    )
-    """)
-
+    _ = study(deck_id=custom_study_session['created_deck_id'], action='start', username=username)
+    print(json.dumps(_, indent=4, ensure_ascii=False))
 
