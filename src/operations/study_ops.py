@@ -216,9 +216,9 @@ if __name__ == "__main__":
             "tags_to_exclude": []      # No tag exclusions
         }
     }
-    username = "chase"
-    deck_id = 1745682159947
-    
+    username = "sekeda"
+    deck_id = 1746196158200    
+
     # Option 1: Create custom study session and show results
     print("Creating custom study session...")
     custom_study_session, status_code = create_custom_study_session(
