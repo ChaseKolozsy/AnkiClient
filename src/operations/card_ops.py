@@ -218,21 +218,25 @@ def get_card_by_id(*, note_id: int, username: str) -> Dict[str, Any]:
     response = requests.get(url, json=data)
     return response.json()
 
-def get_cards_by_tag(*, tag: str, username: str) -> Dict[str, Any]:
+def get_cards_by_tag(*, tag: str, username: str, inclusions: Optional[list] = None) -> Dict[str, Any]:
     url = f"{BASE_URL}/by-tag"
     data = {
         "tag": tag,
         "username": username
     }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
     response = requests.get(url, json=data)
     return response.json()
 
-def get_cards_by_state(*, deck_id: int, state: str, username: str) -> Dict[str, Any]:
+def get_cards_by_state(*, deck_id: int, state: str, username: str, inclusions: Optional[list] = None) -> Dict[str, Any]:
     url = f"{BASE_URL}/{deck_id}/by-state"
     data = {
         "state": state,
         "username": username
     }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
     response = requests.get(url, json=data)
     return response.json()
 
@@ -245,13 +249,15 @@ def get_cards_by_state_without_fields(*, deck_id: int, state: str, username: str
     response = requests.get(url, json=data)
     return response.json()
 
-def get_cards_by_tag_and_state(*, tag: str, state: str, username: str) -> Dict[str, Any]:
+def get_cards_by_tag_and_state(*, tag: str, state: str, username: str, inclusions: Optional[list] = None) -> Dict[str, Any]:
     url = f"{BASE_URL}/by-tag-and-state"
     data = {
         "tag": tag,
         "state": state,
         "username": username
     }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
     response = requests.get(url, json=data)
     return response.json()
 
@@ -291,7 +297,7 @@ def delete_cards_by_deck(*, deck: str, username: str) -> Dict[str, Any]:
     response = requests.delete(url, json=data)
     return response.json()
 
-def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, min_factor: int = 2000, max_factor: int = 2750, min_ratio: float = 0.2, max_ratio: float = 1.0, include_suspended: bool = False, include_fields: bool = True) -> Dict[str, Any]:
+def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, min_factor: int = 2000, max_factor: int = 2750, min_ratio: float = 0.2, max_ratio: float = 1.0, include_suspended: bool = False, include_fields: bool = True, inclusions: Optional[list] = None) -> Dict[str, Any]:
     url = f'{BASE_URL}/by-ease'
     data = {
         'username': username,
@@ -304,10 +310,12 @@ def get_cards_by_ease_(*, username: str, deck_id: int, min_reviews: int = 3, min
         'include_suspended': include_suspended,
         'include_fields': include_fields
     }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
     response = requests.get(url, json=data)
     return response.json()
 
-def get_cards_by_learning_metrics(*, username: str, deck_id: int, min_reviews: Optional[int] = None, max_reviews: Optional[int] = None, min_interval: Optional[int] = None, max_interval: Optional[int] = None, min_factor: Optional[int] = None, max_factor: Optional[int] = None, min_lapses: Optional[int] = None, max_lapses: Optional[int] = None, min_ratio: Optional[float] = None, max_ratio: Optional[float] = None, include_suspended: bool = False, include_new: bool = False, include_fields: bool = True, limit: int = 100) -> Dict[str, Any]:
+def get_cards_by_learning_metrics(*, username: str, deck_id: int, min_reviews: Optional[int] = None, max_reviews: Optional[int] = None, min_interval: Optional[int] = None, max_interval: Optional[int] = None, min_factor: Optional[int] = None, max_factor: Optional[int] = None, min_lapses: Optional[int] = None, max_lapses: Optional[int] = None, min_ratio: Optional[float] = None, max_ratio: Optional[float] = None, include_suspended: bool = False, include_new: bool = False, include_fields: bool = True, limit: int = 100, inclusions: Optional[list] = None) -> Dict[str, Any]:
     url = f'{BASE_URL}/by-learning-metrics'
     data = {
         'username': username,
@@ -327,6 +335,8 @@ def get_cards_by_learning_metrics(*, username: str, deck_id: int, min_reviews: O
         'include_fields': include_fields,
         'limit': limit
     }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
     response = requests.get(url, json=data)
     return response.json()
 
@@ -595,11 +605,6 @@ def test_card_ops():
     print("\n\n---------------- Bury cards by deck ---------------------------\n\n")
     response = bury_cards_by_deck(deck_id=1, username="User 1")
     print(response, '\n\n')
-
-    print("\n\n---------------- Get cards by tag ---------------------------\n\n")
-    response = get_cards_by_tag(tag="geography", username="User 1")
-    for card in response:
-        print(card)
 
     print("\n\n---------------- Delete cards by deck ---------------------------\n\n")
     response = delete_cards_by_deck(deck="1", username="User 1")

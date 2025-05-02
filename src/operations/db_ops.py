@@ -100,9 +100,9 @@ if __name__ == "__main__":
     password = env_vars['ANKI_PASSWORD']
     endpoint = env_vars['ANKI_ENDPOINT']
     hkey = env_vars['ANKI_HKEY']
-    upload = False
-    from user_ops import sync_user_login
     profile_name = 'chase'
+    upload = False
+    #from user_ops import sync_user_login
     #response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
     #print(response)
     #hkey = response['hkey']
