@@ -105,9 +105,9 @@ if __name__ == "__main__":
     profile_name = 'chase'
     #profile_name = 'sekeda'
     upload = False
-    #from user_ops import sync_user_login
-    #response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
-    #print(response)
-    #hkey = response['hkey']
+    from user_ops import sync_user_login
+    response = sync_user_login(profile_name=profile_name, username=username, password=password, endpoint=endpoint, upload=upload)
+    print(response)
+    hkey = response['hkey']
     endpoint = endpoint
     print(sync_db(profile_name, hkey, endpoint, upload=upload))
