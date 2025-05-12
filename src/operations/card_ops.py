@@ -353,6 +353,16 @@ def reset_difficult_cards(*, username: str, deck_id: int, min_reviews: int = 5, 
     response = requests.post(url, json=data)
     return response.json()
 
+def get_cards_by_note_id(*, note_id: int, username: str, inclusions: Optional[list] = None) -> Dict[str, Any]:
+    url = f"{BASE_URL}/by-note-id/{note_id}"
+    data = {
+        "username": username
+    }
+    if inclusions is not None:
+        data["inclusions"] = inclusions
+    response = requests.get(url, json=data)
+    return response.json()
+
 def test_card_ops():
     from note_ops import get_notetypes
     from user_ops import create_user, delete_user
@@ -613,36 +623,44 @@ def test_card_ops():
 
     delete_user(username)
 
+#if __name__ == "__main__":
+#    import json
+#    username = 'chase'
+#    deck_id = "1745682159947"
+#    #response = get_cards_by_tag_and_state_without_fields(tag="Chapter_30", state="new", username=username)
+#    #print(json.dumps(response, indent=4, ensure_ascii=False))
+#    print("\n\n---------------- Get cards by learning metrics ---------------------------\n\n")
+#    response = get_cards_by_learning_metrics(
+#        username=username,
+#        deck_id=deck_id,
+#        min_reviews=0,
+#        max_reviews=8,
+#        min_interval=4,
+#        max_interval=6,
+#        include_suspended=False,
+#        include_new=False,
+#        include_fields=True,
+#        limit=10
+#    )
+#    print(json.dumps(response, indent=4, ensure_ascii=False))
+#
+#    #print("\n\n---------------- get difficult cards ---------------------------\n\n")
+#    #response = get_cards_by_ease_(
+#    #    username=username,
+#    #    deck_id=deck_id,
+#    #    min_reviews=8,
+#    #    max_factor=2300,
+#    #    min_ratio=2.0,
+#    #    include_suspended=False,
+#    #    include_fields=True
+#    #)
+#    #print(json.dumps(response, indent=4, ensure_ascii=False))
+
+
+
 if __name__ == "__main__":
     import json
-    username = 'chase'
-    deck_id = "1745682159947"
-    #response = get_cards_by_tag_and_state_without_fields(tag="Chapter_30", state="new", username=username)
-    #print(json.dumps(response, indent=4, ensure_ascii=False))
-    print("\n\n---------------- Get cards by learning metrics ---------------------------\n\n")
-    response = get_cards_by_learning_metrics(
-        username=username,
-        deck_id=deck_id,
-        min_reviews=0,
-        max_reviews=8,
-        min_interval=4,
-        max_interval=6,
-        include_suspended=False,
-        include_new=False,
-        include_fields=True,
-        limit=10
-    )
+    username = "User 1"
+    tag = "Chapter_36"
+    response = get_cards_by_tag(tag=tag, username=username)
     print(json.dumps(response, indent=4, ensure_ascii=False))
-
-    #print("\n\n---------------- get difficult cards ---------------------------\n\n")
-    #response = get_cards_by_ease_(
-    #    username=username,
-    #    deck_id=deck_id,
-    #    min_reviews=8,
-    #    max_factor=2300,
-    #    min_ratio=2.0,
-    #    include_suspended=False,
-    #    include_fields=True
-    #)
-    #print(json.dumps(response, indent=4, ensure_ascii=False))
-

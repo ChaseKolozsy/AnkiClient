@@ -297,10 +297,12 @@ def get_deck_config(deck_id, username):
 #    delete_user(username)
 
 if __name__ == "__main__":
+    import json
     username = "User 1"
     decks = get_decks(username)
-    for deck in decks:
-        id = deck['id']
-        if id != 1:
-            print(delete_deck(id, username))
+    deck_id = decks[1]['id']
+    print(deck_id)
+    cards = get_cards_in_deck(deck_id, username)
+    print(len(cards))
+    print(json.dumps(cards[0], indent=4, ensure_ascii=False))
 

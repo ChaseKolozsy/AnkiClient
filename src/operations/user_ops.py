@@ -66,5 +66,5 @@ if __name__ == "__main__":
     from dotenv import dotenv_values
     env_vars = dotenv_values()
     username = 'User 1'
-    print(delete_user(username))
+    delete_user(username)
     
