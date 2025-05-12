@@ -354,14 +354,37 @@ def reset_difficult_cards(*, username: str, deck_id: int, min_reviews: int = 5, 
     return response.json()
 
 def get_cards_by_note_id(*, note_id: int, username: str, inclusions: Optional[list] = None) -> Dict[str, Any]:
+    """Get all cards associated with a specific note ID.
+    
+    Args:
+        note_id: The ID of the note to retrieve cards for
+        username: The username of the Anki user
+        inclusions: Optional list of specific fields to include in the response
+        
+    Returns:
+        A list of cards associated with the note ID
+    """
     url = f"{BASE_URL}/by-note-id/{note_id}"
     data = {
         "username": username
     }
     if inclusions is not None:
         data["inclusions"] = inclusions
-    response = requests.get(url, json=data)
-    return response.json()
+    
+    try:
+        response = requests.get(url, json=data)
+        response.raise_for_status()  # Raise an exception for 4XX/5XX responses
+        return response.json()
+    except requests.exceptions.JSONDecodeError:
+        # Handle empty responses
+        if response.status_code == 200 and not response.text:
+            return []
+        # Re-raise the exception for other JSON decode errors
+        raise
+    except requests.exceptions.RequestException as e:
+        # Handle request exceptions
+        return {"error": str(e)}
+
 
 def test_card_ops():
     from note_ops import get_notetypes
@@ -660,7 +683,14 @@ def test_card_ops():
 
 if __name__ == "__main__":
     import json
-    username = "User 1"
-    tag = "Chapter_36"
-    response = get_cards_by_tag(tag=tag, username=username)
-    print(json.dumps(response, indent=4, ensure_ascii=False))
+    username = "chase"
+    
+    # Test getting cards by note ID
+    note_id = 1745675387205  # Note ID from the error
+    print(f"\nTesting get_cards_by_note_id with note_id={note_id}")
+    try:
+        response = get_cards_by_note_id(note_id=note_id, username=username)
+        print(json.dumps(response, indent=4, ensure_ascii=False))
+    except Exception as e:
+        print(f"Error testing get_cards_by_note_id: {e}")
+    
