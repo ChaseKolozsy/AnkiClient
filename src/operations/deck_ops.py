@@ -298,11 +298,41 @@ def get_deck_config(deck_id, username):
 
 if __name__ == "__main__":
     import json
-    username = "User 1"
-    decks = get_decks(username)
-    deck_id = decks[1]['id']
-    print(deck_id)
-    cards = get_cards_in_deck(deck_id, username)
-    print(len(cards))
-    print(json.dumps(cards[0], indent=4, ensure_ascii=False))
+    user_1 = "User 1"
+    user_2 = 'chase'
+    decks_1 = get_decks(user_1)
+    decks_2 = get_decks(user_2)
+    deck_id_1 = 1747127569453
+    deck_id_2 = 1745682159947
+    cards_1 = get_cards_in_deck(deck_id_1, user_1)
+    cards_2 = get_cards_in_deck(deck_id_2, user_2)
+    print(len(cards_1))
+    print(len(cards_2))
+    print(json.dumps(cards_1[0], indent=4, ensure_ascii=False))
+    print(json.dumps(cards_2[0], indent=4, ensure_ascii=False))
+    from submodules.anki.client.src.operations.card_ops import get_card_contents
+    from submodules.anki.client.src.operations.note_ops import update_note_fields
+
+    for card_x in cards_1:
+        card_contents_x = get_card_contents(card_id=card_x['id'], username=user_1)
+        fields_x = card_contents_x['fields']
+        scenarios = fields_x.pop('scenarios')
+        example_x = fields_x.pop('example')
+        formula_x = fields_x.pop('formula')
+        native_x = fields_x.pop('native_language_explanation')
+        target_x = fields_x.pop('target_language_explanation')
+        print(json.dumps(scenarios, indent=4, ensure_ascii=False))
+        for card_y in cards_2:
+            card_contents_y = get_card_contents(card_id=card_y['id'], username=user_2)
+            fields_y = card_contents_y['fields']
+            example_y = fields_y.pop('example')
+            formula_y = fields_y.pop('formula')
+            native_y = fields_y.pop('native_language_explanation')
+            target_y = fields_y.pop('target_language_explanation')
+            if example_x == example_y and formula_x == formula_y and native_x == native_y and target_x == target_y:
+                print("\n\n\n------------------ ------ JACKPOT ------ ------------------\n\n\n")
+                note_id_y = card_contents_y['note_id']
+                fields_x['scenarios'] = scenarios
+                result = update_note_fields(note_id=note_id_y, fields=fields_x, username=user_2)
+                print(result)
 

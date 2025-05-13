@@ -252,18 +252,25 @@ if __name__ == "__main__":
     create_user(username)
     from submodules.anki.client.src.operations.card_ops import create_card
     fields = {
-        "Front": "What is the capital of France?",
-        "Back": "Paris",
+        "Front": "What is the capital of Germany?",
+        "Back": "Berlin",
     }
     notetype = 'Basic'
     deck_id = 1
     tags = ["updated", "test"]
     card_response = create_card(username=username, note_type=notetype, deck_id=deck_id, fields=fields, tags=tags)
     note_id = card_response['note_id']  # Replace with an actual note ID
+
     result = update_note_fields(
         note_id=note_id,
         username=username,
-        fields={"Front": "Updated question text", "Back": "Updated answer text"},
-        tags=tags
+        fields={"Front": "Updated question text", "Back": "Updated answer text"}
     )
     print(json.dumps(result, indent=2))
+
+    #note_types = get_notetypes(username)
+    #print(json.dumps(note_types, indent=2))
+    #notetype_id = "1747127569467"
+    #fields = get_notetype_fields(notetype_id, username)
+    #print(json.dumps(fields, indent=2))
+    
