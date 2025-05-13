@@ -683,10 +683,10 @@ def test_card_ops():
 
 if __name__ == "__main__":
     import json
-    username = "chase"
+    username = "User 1"
     
     # Test getting cards by note ID
-    note_id = 1745675387205  # Note ID from the error
+    note_id = 1747125046611    
     print(f"\nTesting get_cards_by_note_id with note_id={note_id}")
     try:
         response = get_cards_by_note_id(note_id=note_id, username=username)

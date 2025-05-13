@@ -88,6 +88,34 @@ def delete_notetype(notetype_id, username):
     response = requests.delete(f"{BASE_URL}/{notetype_id}/delete", json={"username": username})
     return response.json()
 
+def update_note_fields(note_id, username, fields=None, tags=None):
+    """
+    Update the fields and/or tags of a note.
+    
+    Args:
+        note_id: The ID of the note to update
+        username: The profile username
+        fields: Dictionary of field names and their new values
+        tags: Optional list of tags to set for the note
+        
+    Returns:
+        JSON response from the API with updated note information
+    """
+    if not fields and tags is None:
+        raise ValueError("At least fields or tags must be provided")
+    
+    data = {
+        "username": username
+    }
+    
+    if fields:
+        data["fields"] = fields
+    if tags is not None:
+        data["tags"] = tags
+    
+    response = requests.post(f"{BASE_URL}/update-note/{note_id}", json=data)
+    return response.json()
+
 # Example usage
 
 def test_note_ops():
@@ -216,6 +244,26 @@ def test_note_ops():
     delete_user(username)
 
 if __name__ == "__main__":
-    note_types = get_notetypes(username="User 1")
-    print(note_types)
-    #print(delete_notetype(notetype_id="1745506364405", username="User 1"))
+
+    # Uncomment to test update_note_fields - replace with an actual note ID
+    import json
+    username = "User 1"
+    from submodules.anki.client.src.operations.user_ops import create_user
+    create_user(username)
+    from submodules.anki.client.src.operations.card_ops import create_card
+    fields = {
+        "Front": "What is the capital of France?",
+        "Back": "Paris",
+    }
+    notetype = 'Basic'
+    deck_id = 1
+    tags = ["updated", "test"]
+    card_response = create_card(username=username, note_type=notetype, deck_id=deck_id, fields=fields, tags=tags)
+    note_id = card_response['note_id']  # Replace with an actual note ID
+    result = update_note_fields(
+        note_id=note_id,
+        username=username,
+        fields={"Front": "Updated question text", "Back": "Updated answer text"},
+        tags=tags
+    )
+    print(json.dumps(result, indent=2))
