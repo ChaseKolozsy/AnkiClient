@@ -125,7 +125,7 @@ def test_import_ops():
 
 if __name__ == "__main__":
     from pathlib import Path
-    username = "User 1"
+    username = "chase"
     file_name = 'HungarianGrammarPoints.apkg'
     file_path = Path.home() / f'Documents/FromX2Ank/aXaTT/submodules/anki/client/data/exports/{username}/{file_name}'
-    print(upload_anki_package("sekeda", file_path))
+    print(upload_anki_package(username, file_path))
