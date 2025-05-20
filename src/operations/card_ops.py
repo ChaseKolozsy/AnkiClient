@@ -778,14 +778,9 @@ if __name__ == "__main__":
     username = "chase"
     note_id = 1747125046611    
     deck_id = 1747743946886
-    cards = get_cards_by_state(deck_id=deck_id, state="new", username=username)
-    print(len(cards))
-    gp_id = cards[40]['fields']['grammar_code']
-    print(gp_id)
-    
-    results = get_cards_by_field_content(
-        username=username,
-        field_name="grammar_code",
-        field_content=gp_id
-    )
-    print(json.dumps(results, indent=4, ensure_ascii=False))
+    cards = get_cards_by_tag(tag="Chapter_1", username=username)
+
+    for card in cards:
+      _ = suspend_card(card_id=card['id'], username=username)
+      print(json.dumps(_, indent=4, ensure_ascii=False))
+
