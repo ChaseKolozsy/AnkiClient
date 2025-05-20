@@ -385,6 +385,96 @@ def get_cards_by_note_id(*, note_id: int, username: str, inclusions: Optional[li
         # Handle request exceptions
         return {"error": str(e)}
 
+def get_cards_by_field_content(*, username: str, field_name: str, field_content: str, 
+                             exact_match: bool = True, deck_id: Optional[int] = None, 
+                             inclusions: Optional[list] = None) -> Dict[str, Any]:
+    """Get cards where a specific field matches exact content or contains a substring.
+    
+    Args:
+        username: The Anki username
+        field_name: Name of the field to search
+        field_content: Content to search for in the field
+        exact_match: Whether to do exact match (True) or substring search (False)
+        deck_id: Optional deck ID to restrict search to
+        inclusions: Optional list of specific fields to include in response
+        
+    Returns:
+        List of cards matching the search criteria
+    """
+    url = f"{BASE_URL}/by-field-content"
+    data = {
+        "username": username,
+        "field_name": field_name,
+        "field_content": field_content,
+        "exact_match": exact_match
+    }
+    if deck_id is not None:
+        data["deck_id"] = deck_id
+    if inclusions is not None:
+        data["inclusions"] = inclusions
+        
+    response = requests.get(url, json=data)
+    return response.json()
+
+def get_cards_by_field_substring(*, username: str, field_name: str, substring: str,
+                               case_sensitive: bool = False, deck_id: Optional[int] = None,
+                               inclusions: Optional[list] = None) -> Dict[str, Any]:
+    """Get cards where a specific field contains a substring.
+    
+    Args:
+        username: The Anki username
+        field_name: Name of the field to search
+        substring: Substring to search for in the field
+        case_sensitive: Whether search should be case sensitive
+        deck_id: Optional deck ID to restrict search to
+        inclusions: Optional list of specific fields to include in response
+        
+    Returns:
+        List of cards matching the search criteria
+    """
+    url = f"{BASE_URL}/by-field-substring"
+    data = {
+        "username": username,
+        "field_name": field_name,
+        "substring": substring,
+        "case_sensitive": case_sensitive
+    }
+    if deck_id is not None:
+        data["deck_id"] = deck_id
+    if inclusions is not None:
+        data["inclusions"] = inclusions
+        
+    response = requests.get(url, json=data)
+    return response.json()
+
+def advanced_field_search(*, username: str, field_conditions: List[Dict[str, Any]],
+                        join_operator: str = "AND", deck_id: Optional[int] = None,
+                        inclusions: Optional[list] = None) -> Dict[str, Any]:
+    """Advanced search for cards matching multiple field conditions.
+    
+    Args:
+        username: The Anki username
+        field_conditions: List of field conditions (each with field_name, operation, value)
+        join_operator: How to join conditions ('AND' or 'OR')
+        deck_id: Optional deck ID to restrict search to
+        inclusions: Optional list of specific fields to include in response
+        
+    Returns:
+        Dictionary with cards matching the search criteria and search metadata
+    """
+    url = f"{BASE_URL}/advanced-field-search"
+    data = {
+        "username": username,
+        "field_conditions": field_conditions,
+        "join_operator": join_operator
+    }
+    if deck_id is not None:
+        data["deck_id"] = deck_id
+    if inclusions is not None:
+        data["inclusions"] = inclusions
+        
+    response = requests.post(url, json=data)
+    return response.json()
 
 def test_card_ops():
     from note_ops import get_notetypes
@@ -683,14 +773,19 @@ def test_card_ops():
 
 if __name__ == "__main__":
     import json
-    username = "User 1"
-    
-    # Test getting cards by note ID
+    from submodules.anki.client.src.operations.deck_ops import get_cards_in_deck
+
+    username = "chase"
     note_id = 1747125046611    
-    print(f"\nTesting get_cards_by_note_id with note_id={note_id}")
-    try:
-        response = get_cards_by_note_id(note_id=note_id, username=username)
-        print(json.dumps(response, indent=4, ensure_ascii=False))
-    except Exception as e:
-        print(f"Error testing get_cards_by_note_id: {e}")
+    deck_id = 1747743946886
+    cards = get_cards_by_state(deck_id=deck_id, state="new", username=username)
+    print(len(cards))
+    gp_id = cards[40]['fields']['grammar_code']
+    print(gp_id)
     
+    results = get_cards_by_field_content(
+        username=username,
+        field_name="grammar_code",
+        field_content=gp_id
+    )
+    print(json.dumps(results, indent=4, ensure_ascii=False))

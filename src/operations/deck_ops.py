@@ -361,7 +361,4 @@ if __name__ == "__main__":
     import json
     user = 'chase'
     decks = get_decks(user)
-    response = delete_deck(decks[2]['id'], user)
-    print(response)
-    decks = get_decks(user)
     print(decks)
