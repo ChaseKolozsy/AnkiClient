@@ -208,16 +208,17 @@ def test_study_ops():
 if __name__ == "__main__":
     # Setup parameters for custom study
     custom_study_params = {
-        "new_limit_delta": 0,
+        "new_limit_delta": 5,
         "cram": {
             "kind": "CRAM_KIND_DUE",  # Study due cards
-            "card_limit": 1000,        # Limit to 1000 cards max
+            "card_limit": 1,        # Limit to 1000 cards max
             "tags_to_include": [],     # No tag filtering
             "tags_to_exclude": []      # No tag exclusions
         }
     }
-    username = "sekeda"
-    deck_id = 1746196158200    
+    username = "chase"
+    deck_id = 1747743946886   
+    created_deck_id = 1746123115042
 
     # Option 1: Create custom study session and show results
     print("Creating custom study session...")
@@ -226,9 +227,10 @@ if __name__ == "__main__":
         deck_id=deck_id, 
         custom_study_params=custom_study_params
     )
-    import json
     print(f"Status code: {status_code}")
+    import json
     print(json.dumps(custom_study_session, indent=4, ensure_ascii=False))
     _ = study(deck_id=custom_study_session['created_deck_id'], action='start', username=username)
     print(json.dumps(_, indent=4, ensure_ascii=False))
+    _ = study(deck_id=custom_study_session['created_deck_id'], action='close', username=username)
 
