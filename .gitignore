@@ -17,3 +17,5 @@ out*
 test_custom_fields_deck.py
 data/
 last_commit.txt
+
+.claude
