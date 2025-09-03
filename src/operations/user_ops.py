@@ -64,7 +64,9 @@ def sync_user_login(*, profile_name: str, username: str, password: str, upload: 
 
 if __name__ == "__main__":
     from dotenv import dotenv_values
+    import json
     env_vars = dotenv_values()
-    username = 'User 1'
-    delete_user(username)
+    username = 'chase'
+    result = create_user(username=username)
+    print(json.dumps(result, indent=4, ensure_ascii=False))
     
