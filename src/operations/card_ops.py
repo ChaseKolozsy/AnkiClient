@@ -258,8 +258,22 @@ def get_cards_by_tag_and_state(*, tag: str, state: str, username: str, inclusion
     }
     if inclusions is not None:
         data["inclusions"] = inclusions
+
+    # Debug logging
+    print(f"[ANKI_CLIENT] get_cards_by_tag_and_state: GET {url} with data: {data}")
+
     response = requests.get(url, json=data)
-    return response.json()
+
+    # Debug response handling
+    print(f"[ANKI_CLIENT] Response status: {response.status_code}")
+    print(f"[ANKI_CLIENT] Response text: {response.text}")
+
+    try:
+        return response.json()
+    except Exception as e:
+        print(f"[ANKI_CLIENT] JSON parsing error: {e}")
+        print(f"[ANKI_CLIENT] Raw response: {response.text}")
+        return {"error": str(e)}
 
 def get_cards_by_tag_and_state_without_fields(*, tag: str, state: str, username: str) -> Dict[str, Any]:
     url = f"{BASE_URL}/by-tag-and-state-without-fields"

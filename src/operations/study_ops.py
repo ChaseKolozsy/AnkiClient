@@ -10,11 +10,10 @@ def study(*, deck_id: int, action: str, username: str, base_url: str = BASE_URL)
     response = requests.post(url, json={"action": action, "deck_id": deck_id, "username": username})
     response_data = response.json()
 
-    # Process media files if present
-    if 'media_files' in response_data:
-        for filename, filedata in response_data['media_files'].items():
-            with open(f"{media_path}/{filename}", "wb") as media_file:
-                media_file.write(base64.b64decode(filedata))
+    # Note: Media files are already embedded as base64 data URLs in the field HTML
+    # by the backend (blueprint_study_sessions.py process_media_files function).
+    # The 'media_files' dict in the response is kept for backwards compatibility
+    # but the web app doesn't need to save them to disk.
 
     return response_data, response.status_code
 
