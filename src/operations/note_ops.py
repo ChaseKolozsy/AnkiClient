@@ -48,6 +48,18 @@ def add_template_to_notetype(notetype_id, template_name, qfmt, afmt, username):
     response = requests.post(f"{BASE_URL}/{notetype_id}/add-template", json=data)
     return response.json()
 
+def update_template(notetype_id, template_index, qfmt, afmt, username):
+    data = {
+        "template_index": template_index,
+        "username": username
+    }
+    if qfmt is not None:
+        data["qfmt"] = qfmt
+    if afmt is not None:
+        data["afmt"] = afmt
+    response = requests.post(f"{BASE_URL}/{notetype_id}/update-template", json=data)
+    return response.json()
+
 def update_notetype_css(notetype_id, new_css, username):
     data = {
         "css": new_css,
